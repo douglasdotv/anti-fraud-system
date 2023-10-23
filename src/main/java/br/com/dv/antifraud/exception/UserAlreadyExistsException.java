@@ -1,0 +1,9 @@
+package br.com.dv.antifraud.exception;
+
+public class UserAlreadyExistsException extends RuntimeException {
+
+    public UserAlreadyExistsException(String message) {
+        super(message);
+    }
+
+}
