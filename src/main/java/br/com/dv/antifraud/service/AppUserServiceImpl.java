@@ -3,8 +3,11 @@ package br.com.dv.antifraud.service;
 import br.com.dv.antifraud.dto.UserCreationInfo;
 import br.com.dv.antifraud.dto.UserResponse;
 import br.com.dv.antifraud.dto.UserDeletionResponse;
+import br.com.dv.antifraud.dto.UserRoleUpdateInfo;
 import br.com.dv.antifraud.entity.AppUserRole;
 import br.com.dv.antifraud.enums.RoleType;
+import br.com.dv.antifraud.exception.InvalidRoleException;
+import br.com.dv.antifraud.exception.RoleAlreadyAssignedException;
 import br.com.dv.antifraud.exception.UserAlreadyExistsException;
 import br.com.dv.antifraud.mapper.AppUserMapper;
 import br.com.dv.antifraud.entity.AppUser;
@@ -25,11 +28,9 @@ public class AppUserServiceImpl implements AppUserService {
     private final AppUserRoleRepository roleRepository;
     private final PasswordEncoder encoder;
 
-    public AppUserServiceImpl(
-            AppUserRepository userRepository,
-            AppUserRoleRepository roleRepository,
-            PasswordEncoder encoder
-    ) {
+    public AppUserServiceImpl(AppUserRepository userRepository,
+                              AppUserRoleRepository roleRepository,
+                              PasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.encoder = encoder;
@@ -76,6 +77,32 @@ public class AppUserServiceImpl implements AppUserService {
         userRepository.delete(user);
 
         return AppUserMapper.toDeletionResponse(user);
+    }
+
+    @Override
+    @Transactional
+    public UserResponse changeRole(UserRoleUpdateInfo userRoleUpdateInfo) {
+        if (userRoleUpdateInfo.role().equals(RoleType.ADMINISTRATOR)) {
+            throw new InvalidRoleException("Invalid role. The available roles are MERCHANT and SUPPORT.");
+        }
+
+        Optional<AppUser> userOptional = userRepository.findByUsernameIgnoreCase(userRoleUpdateInfo.username());
+
+        if (userOptional.isEmpty()) {
+            throw new EntityNotFoundException("User not found!");
+        }
+
+        AppUser user = userOptional.get();
+
+        if (user.getRole().getName().equals(userRoleUpdateInfo.role().name())) {
+            throw new RoleAlreadyAssignedException("User already has this role!");
+        }
+
+        AppUserRole userRole = getOrCreateRole(userRoleUpdateInfo.role());
+        user.setRole(userRole);
+
+        AppUser savedUser = userRepository.save(user);
+        return AppUserMapper.toResponse(savedUser);
     }
 
     private AppUserRole getOrCreateRole(RoleType role) {

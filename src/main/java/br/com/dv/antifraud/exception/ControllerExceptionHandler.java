@@ -70,4 +70,34 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
+    @ExceptionHandler(InvalidRoleException.class)
+    public ResponseEntity<CustomErrorMessage> handleInvalidRoleException(
+            InvalidRoleException ex,
+            WebRequest request
+    ) {
+        CustomErrorMessage errorResponse = new CustomErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now(),
+                request.getDescription(false),
+                Collections.singletonMap("error", ex.getMessage())
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(RoleAlreadyAssignedException.class)
+    public ResponseEntity<CustomErrorMessage> handleRoleAlreadyAssignedException(
+            RoleAlreadyAssignedException ex,
+            WebRequest request
+    ) {
+        CustomErrorMessage errorResponse = new CustomErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now(),
+                request.getDescription(false),
+                Collections.singletonMap("error", ex.getMessage())
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
 }
