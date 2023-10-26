@@ -19,7 +19,7 @@ public class AppUserMapper {
     }
 
     public static UserResponse toResponse(AppUser user) {
-        return new UserResponse(user.getId(), user.getName(), user.getUsername());
+        return new UserResponse(user.getId(), user.getName(), user.getUsername(), user.getRole().getName());
     }
 
     public static List<UserResponse> toResponseList(List<AppUser> appUsers) {
