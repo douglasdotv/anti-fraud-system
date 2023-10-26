@@ -1,9 +1,6 @@
 package br.com.dv.antifraud.service;
 
-import br.com.dv.antifraud.dto.UserCreationInfo;
-import br.com.dv.antifraud.dto.UserResponse;
-import br.com.dv.antifraud.dto.UserDeletionResponse;
-import br.com.dv.antifraud.dto.UserRoleUpdateInfo;
+import br.com.dv.antifraud.dto.*;
 
 import java.util.List;
 
@@ -16,5 +13,7 @@ public interface AppUserService {
     UserDeletionResponse delete(String username);
 
     UserResponse changeRole(UserRoleUpdateInfo roleUpdateInfo);
+
+    UserStatusUpdateResponse changeStatus(UserStatusUpdateInfo userStatusUpdateInfo);
 
 }

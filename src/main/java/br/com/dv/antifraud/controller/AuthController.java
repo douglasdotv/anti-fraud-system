@@ -1,9 +1,6 @@
 package br.com.dv.antifraud.controller;
 
-import br.com.dv.antifraud.dto.UserCreationInfo;
-import br.com.dv.antifraud.dto.UserResponse;
-import br.com.dv.antifraud.dto.UserDeletionResponse;
-import br.com.dv.antifraud.dto.UserRoleUpdateInfo;
+import br.com.dv.antifraud.dto.*;
 import br.com.dv.antifraud.service.AppUserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +43,12 @@ public class AuthController {
     @PutMapping("/role")
     public ResponseEntity<UserResponse> changeRole(@RequestBody UserRoleUpdateInfo roleUpdateInfo) {
         UserResponse response = userService.changeRole(roleUpdateInfo);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/access")
+    public ResponseEntity<UserStatusUpdateResponse> changeStatus(@RequestBody UserStatusUpdateInfo statusUpdateInfo) {
+        UserStatusUpdateResponse response = userService.changeStatus(statusUpdateInfo);
         return ResponseEntity.ok(response);
     }
 

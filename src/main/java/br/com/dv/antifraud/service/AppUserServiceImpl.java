@@ -1,11 +1,10 @@
 package br.com.dv.antifraud.service;
 
-import br.com.dv.antifraud.dto.UserCreationInfo;
-import br.com.dv.antifraud.dto.UserResponse;
-import br.com.dv.antifraud.dto.UserDeletionResponse;
-import br.com.dv.antifraud.dto.UserRoleUpdateInfo;
+import br.com.dv.antifraud.dto.*;
 import br.com.dv.antifraud.entity.AppUserRole;
 import br.com.dv.antifraud.enums.RoleType;
+import br.com.dv.antifraud.enums.UserOperation;
+import br.com.dv.antifraud.exception.CannotLockAdminException;
 import br.com.dv.antifraud.exception.InvalidRoleException;
 import br.com.dv.antifraud.exception.RoleAlreadyAssignedException;
 import br.com.dv.antifraud.exception.UserAlreadyExistsException;
@@ -45,7 +44,7 @@ public class AppUserServiceImpl implements AppUserService {
             throw new UserAlreadyExistsException("User already exists!");
         }
 
-        AppUser user = AppUserMapper.toEntity(userCreationInfo);
+        AppUser user = AppUserMapper.dtoToEntity(userCreationInfo);
 
         user.setPassword(encoder.encode(user.getPassword()));
 
@@ -56,13 +55,13 @@ public class AppUserServiceImpl implements AppUserService {
 
         AppUser savedUser = userRepository.save(user);
 
-        return AppUserMapper.toResponse(savedUser);
+        return AppUserMapper.entityToDto(savedUser);
     }
 
     @Override
     public List<UserResponse> findAll() {
         List<AppUser> users = userRepository.findAllByOrderByIdAsc();
-        return AppUserMapper.toResponseList(users);
+        return AppUserMapper.entityToDtoList(users);
     }
 
     @Override
@@ -76,7 +75,7 @@ public class AppUserServiceImpl implements AppUserService {
         AppUser user = userOptional.get();
         userRepository.delete(user);
 
-        return AppUserMapper.toDeletionResponse(user);
+        return AppUserMapper.entityToDeletionDto(user);
     }
 
     @Override
@@ -102,7 +101,28 @@ public class AppUserServiceImpl implements AppUserService {
         user.setRole(userRole);
 
         AppUser savedUser = userRepository.save(user);
-        return AppUserMapper.toResponse(savedUser);
+        return AppUserMapper.entityToDto(savedUser);
+    }
+
+    @Override
+    @Transactional
+    public UserStatusUpdateResponse changeStatus(UserStatusUpdateInfo userStatusUpdateInfo) {
+        Optional<AppUser> userOptional = userRepository.findByUsernameIgnoreCase(userStatusUpdateInfo.username());
+
+        if (userOptional.isEmpty()) {
+            throw new EntityNotFoundException("User not found!");
+        }
+
+        AppUser user = userOptional.get();
+
+        if (user.getRole().getName().equals(RoleType.ADMINISTRATOR.name())) {
+            throw new CannotLockAdminException("Cannot assign LOCK status to ADMIN.");
+        }
+
+        user.setLocked(userStatusUpdateInfo.operation().equals(UserOperation.LOCK));
+
+        AppUser savedUser = userRepository.save(user);
+        return AppUserMapper.entityToStatusUpdateDto(savedUser);
     }
 
     private AppUserRole getOrCreateRole(RoleType role) {
