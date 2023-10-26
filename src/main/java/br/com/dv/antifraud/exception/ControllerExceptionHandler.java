@@ -100,4 +100,19 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
+    @ExceptionHandler(CannotLockAdminException.class)
+    public ResponseEntity<CustomErrorMessage> handleCannotLockAdminException(
+            CannotLockAdminException ex,
+            WebRequest request
+    ) {
+        CustomErrorMessage errorResponse = new CustomErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now(),
+                request.getDescription(false),
+                Collections.singletonMap("error", ex.getMessage())
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
 }
