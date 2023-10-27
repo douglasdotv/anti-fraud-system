@@ -1,4 +1,4 @@
-package br.com.dv.antifraud.dto;
+package br.com.dv.antifraud.dto.error;
 
 import java.time.LocalDateTime;
 import java.util.Map;

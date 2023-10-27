@@ -1,9 +1,9 @@
 package br.com.dv.antifraud.mapper;
 
-import br.com.dv.antifraud.dto.UserCreationInfo;
-import br.com.dv.antifraud.dto.UserResponse;
-import br.com.dv.antifraud.dto.UserDeletionResponse;
-import br.com.dv.antifraud.dto.UserStatusUpdateResponse;
+import br.com.dv.antifraud.dto.user.UserCreationInfo;
+import br.com.dv.antifraud.dto.user.UserResponse;
+import br.com.dv.antifraud.dto.user.UserDeletionResponse;
+import br.com.dv.antifraud.dto.user.UserStatusUpdateResponse;
 import br.com.dv.antifraud.entity.AppUser;
 
 import java.util.List;

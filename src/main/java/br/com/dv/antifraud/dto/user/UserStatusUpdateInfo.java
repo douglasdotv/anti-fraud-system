@@ -1,4 +1,4 @@
-package br.com.dv.antifraud.dto;
+package br.com.dv.antifraud.dto.user;
 
 import br.com.dv.antifraud.enums.UserOperation;
 import jakarta.validation.constraints.NotBlank;

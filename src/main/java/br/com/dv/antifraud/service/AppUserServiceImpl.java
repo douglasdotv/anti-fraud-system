@@ -1,6 +1,6 @@
 package br.com.dv.antifraud.service;
 
-import br.com.dv.antifraud.dto.*;
+import br.com.dv.antifraud.dto.user.*;
 import br.com.dv.antifraud.entity.AppUserRole;
 import br.com.dv.antifraud.enums.RoleType;
 import br.com.dv.antifraud.enums.UserOperation;
