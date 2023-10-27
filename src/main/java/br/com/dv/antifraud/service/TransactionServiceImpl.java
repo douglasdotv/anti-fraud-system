@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -40,7 +41,7 @@ public class TransactionServiceImpl implements TransactionService {
             result = TransactionResult.PROHIBITED;
         }
 
-        String info = getInfo(result, amount, isStolenCard, isSuspiciousIp);
+        String info = getTransactionInfo(result, amount, isStolenCard, isSuspiciousIp);
 
         return new TransactionResponse(result.name(), info);
     }
@@ -55,17 +56,22 @@ public class TransactionServiceImpl implements TransactionService {
         }
     }
 
-    private String getInfo(TransactionResult result, Long amount, boolean stolenCard, boolean suspiciousIp) {
-        switch (result) {
+    private String getTransactionInfo(TransactionResult res, Long amount, boolean stolenCard, boolean suspiciousIp) {
+        switch (res) {
             case ALLOWED:
                 return NONE;
             case MANUAL_PROCESSING:
                 return AMOUNT;
             case PROHIBITED:
                 List<String> reasons = new ArrayList<>();
+
                 if (amount > 1500) reasons.add(AMOUNT);
                 if (stolenCard) reasons.add(CARD_NUMBER);
                 if (suspiciousIp) reasons.add(IP);
+
+                // Sorting just in case future updates mess with the order
+                Collections.sort(reasons);
+
                 return String.join(", ", reasons);
             default:
                 return "";
