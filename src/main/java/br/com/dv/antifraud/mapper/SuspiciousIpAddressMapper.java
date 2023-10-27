@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 public class SuspiciousIpAddressMapper {
 
+    private static final String IP_REMOVAL_STATUS = "IP %s successfully removed!";
+
     public static SuspiciousIpAddress dtoToEntity(SuspiciousIpInfo ipInfo) {
         SuspiciousIpAddress ipAddress = new SuspiciousIpAddress();
         ipAddress.setIpAddress(ipInfo.ip());
@@ -27,7 +29,7 @@ public class SuspiciousIpAddressMapper {
     }
 
     public static SuspiciousIpDeletionResponse entityToDeletionDto(SuspiciousIpAddress ipAddress) {
-        String deletionStatus = String.format("IP %s successfully removed!", ipAddress.getIpAddress());
+        String deletionStatus = String.format(IP_REMOVAL_STATUS, ipAddress.getIpAddress());
         return new SuspiciousIpDeletionResponse(deletionStatus);
     }
 

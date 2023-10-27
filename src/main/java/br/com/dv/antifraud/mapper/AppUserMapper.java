@@ -11,6 +11,10 @@ import java.util.stream.Collectors;
 
 public class AppUserMapper {
 
+    private static final String DELETED_SUCCESSFULLY = "Deleted successfully!";
+    private static final String LOCKED = "locked";
+    private static final String UNLOCKED = "unlocked";
+
     public static AppUser dtoToEntity(UserCreationInfo creationInfo) {
         AppUser user = new AppUser();
         user.setName(creationInfo.name());
@@ -30,11 +34,11 @@ public class AppUserMapper {
     }
 
     public static UserDeletionResponse entityToDeletionDto(AppUser user) {
-        return new UserDeletionResponse(user.getUsername(), "Deleted successfully!");
+        return new UserDeletionResponse(user.getUsername(), DELETED_SUCCESSFULLY);
     }
 
     public static UserStatusUpdateResponse entityToStatusUpdateDto(AppUser user) {
-        String lockStatus = user.isLocked() ? "locked" : "unlocked";
+        String lockStatus = user.isLocked() ? LOCKED : UNLOCKED;
         String responseStatus = String.format("User %s %s!", user.getUsername(), lockStatus);
         return new UserStatusUpdateResponse(responseStatus);
     }
