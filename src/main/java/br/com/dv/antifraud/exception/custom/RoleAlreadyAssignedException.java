@@ -1,4 +1,4 @@
-package br.com.dv.antifraud.exception;
+package br.com.dv.antifraud.exception.custom;
 
 public class RoleAlreadyAssignedException extends RuntimeException {
 

@@ -4,10 +4,10 @@ import br.com.dv.antifraud.dto.user.*;
 import br.com.dv.antifraud.entity.AppUserRole;
 import br.com.dv.antifraud.enums.RoleType;
 import br.com.dv.antifraud.enums.UserOperation;
-import br.com.dv.antifraud.exception.CannotLockAdminException;
-import br.com.dv.antifraud.exception.InvalidRoleException;
-import br.com.dv.antifraud.exception.RoleAlreadyAssignedException;
-import br.com.dv.antifraud.exception.UserAlreadyExistsException;
+import br.com.dv.antifraud.exception.custom.CannotLockAdminException;
+import br.com.dv.antifraud.exception.custom.EntityAlreadyExistsException;
+import br.com.dv.antifraud.exception.custom.InvalidRoleException;
+import br.com.dv.antifraud.exception.custom.RoleAlreadyAssignedException;
 import br.com.dv.antifraud.mapper.AppUserMapper;
 import br.com.dv.antifraud.entity.AppUser;
 import br.com.dv.antifraud.repository.AppUserRepository;
@@ -41,7 +41,7 @@ public class AppUserServiceImpl implements AppUserService {
         Optional<AppUser> userOptional = userRepository.findByUsernameIgnoreCase(userCreationInfo.username());
 
         if (userOptional.isPresent()) {
-            throw new UserAlreadyExistsException("User already exists!");
+            throw new EntityAlreadyExistsException("User already exists!");
         }
 
         AppUser user = AppUserMapper.dtoToEntity(userCreationInfo);
