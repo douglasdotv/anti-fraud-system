@@ -36,8 +36,8 @@ public class AuthController {
 
     @DeleteMapping("/user/{username}")
     public ResponseEntity<UserDeletionResponse> deleteUser(@PathVariable String username) {
-        UserDeletionResponse userDeletionResponse = userService.delete(username);
-        return ResponseEntity.ok(userDeletionResponse);
+        UserDeletionResponse response = userService.delete(username);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/role")

@@ -22,8 +22,8 @@ public class TransactionController {
 
     @PostMapping("/transaction")
     public ResponseEntity<TransactionResponse> processTransaction(@Valid @RequestBody TransactionInfo transaction) {
-        TransactionResponse transactionResponse = transactionService.processTransaction(transaction);
-        return ResponseEntity.ok(transactionResponse);
+        TransactionResponse response = transactionService.processTransaction(transaction);
+        return ResponseEntity.ok(response);
     }
 
 }
