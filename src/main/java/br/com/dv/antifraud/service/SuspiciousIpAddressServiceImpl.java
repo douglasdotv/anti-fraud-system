@@ -4,7 +4,7 @@ import br.com.dv.antifraud.dto.ip.SuspiciousIpDeletionResponse;
 import br.com.dv.antifraud.dto.ip.SuspiciousIpInfo;
 import br.com.dv.antifraud.dto.ip.SuspiciousIpResponse;
 import br.com.dv.antifraud.entity.SuspiciousIpAddress;
-import br.com.dv.antifraud.exception.SuspiciousIpAddressAlreadyExistsException;
+import br.com.dv.antifraud.exception.custom.EntityAlreadyExistsException;
 import br.com.dv.antifraud.mapper.SuspiciousIpAddressMapper;
 import br.com.dv.antifraud.repository.SuspiciousIpAddressRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -29,7 +29,7 @@ public class SuspiciousIpAddressServiceImpl implements SuspiciousIpAddressServic
         Optional<SuspiciousIpAddress> suspiciousIpOptional = ipRepository.findByIpAddress(ipInfo.ip());
 
         if (suspiciousIpOptional.isPresent()) {
-            throw new SuspiciousIpAddressAlreadyExistsException("Suspicious IP address already exists!");
+            throw new EntityAlreadyExistsException("Suspicious IP address already exists!");
         }
 
         SuspiciousIpAddress suspiciousIp = SuspiciousIpAddressMapper.dtoToEntity(ipInfo);

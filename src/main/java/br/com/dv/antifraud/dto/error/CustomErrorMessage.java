@@ -7,6 +7,6 @@ public record CustomErrorMessage(
         Integer statusCode,
         LocalDateTime timestamp,
         String description,
-        Map<String, String> fieldErrors
+        Map<String, String> errors
 ) {
 }
