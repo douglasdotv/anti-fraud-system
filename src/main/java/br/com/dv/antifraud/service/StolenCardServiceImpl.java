@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class StolenCardServiceImpl implements StolenCardService {
@@ -26,11 +25,9 @@ public class StolenCardServiceImpl implements StolenCardService {
     @Override
     @Transactional
     public StolenCardResponse saveStolenCard(StolenCardInfo cardInfo) {
-        Optional<StolenCard> stolenCardOptional = cardRepository.findByCardNumber(cardInfo.number());
-
-        if (stolenCardOptional.isPresent()) {
-            throw new EntityAlreadyExistsException("Stolen card already exists!");
-        }
+        cardRepository.findByCardNumber(cardInfo.number()).ifPresent(card -> {
+            throw new EntityAlreadyExistsException("Stolen card already exists.");
+        });
 
         StolenCard stolenCard = StolenCardMapper.dtoToEntity(cardInfo);
         StolenCard savedStolenCard = cardRepository.save(stolenCard);
@@ -41,13 +38,9 @@ public class StolenCardServiceImpl implements StolenCardService {
     @Override
     @Transactional
     public StolenCardDeletionResponse deleteStolenCard(String cardNumber) {
-        Optional<StolenCard> stolenCardOptional = cardRepository.findByCardNumber(cardNumber);
+        StolenCard stolenCard = cardRepository.findByCardNumber(cardNumber)
+                .orElseThrow(() -> new EntityNotFoundException("Stolen card not found!"));
 
-        if (stolenCardOptional.isEmpty()) {
-            throw new EntityNotFoundException("Stolen card not found!");
-        }
-
-        StolenCard stolenCard = stolenCardOptional.get();
         cardRepository.delete(stolenCard);
 
         return StolenCardMapper.entityToDeletionDto(stolenCard);

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SuspiciousIpAddressServiceImpl implements SuspiciousIpAddressService {
@@ -26,11 +25,9 @@ public class SuspiciousIpAddressServiceImpl implements SuspiciousIpAddressServic
     @Override
     @Transactional
     public SuspiciousIpResponse saveSuspiciousIp(SuspiciousIpInfo ipInfo) {
-        Optional<SuspiciousIpAddress> suspiciousIpOptional = ipRepository.findByIpAddress(ipInfo.ip());
-
-        if (suspiciousIpOptional.isPresent()) {
-            throw new EntityAlreadyExistsException("Suspicious IP address already exists!");
-        }
+        ipRepository.findByIpAddress(ipInfo.ip()).ifPresent(suspiciousIp -> {
+            throw new EntityAlreadyExistsException("Suspicious IP address already exists.");
+        });
 
         SuspiciousIpAddress suspiciousIp = SuspiciousIpAddressMapper.dtoToEntity(ipInfo);
         SuspiciousIpAddress savedSuspiciousIp = ipRepository.save(suspiciousIp);
@@ -41,13 +38,9 @@ public class SuspiciousIpAddressServiceImpl implements SuspiciousIpAddressServic
     @Override
     @Transactional
     public SuspiciousIpDeletionResponse deleteSuspiciousIp(String ip) {
-        Optional<SuspiciousIpAddress> suspiciousIpOptional = ipRepository.findByIpAddress(ip);
+        SuspiciousIpAddress suspiciousIp = ipRepository.findByIpAddress(ip)
+                .orElseThrow(() -> new EntityNotFoundException("Suspicious IP address not found."));
 
-        if (suspiciousIpOptional.isEmpty()) {
-            throw new EntityNotFoundException("Suspicious IP address not found!");
-        }
-
-        SuspiciousIpAddress suspiciousIp = suspiciousIpOptional.get();
         ipRepository.delete(suspiciousIp);
 
         return SuspiciousIpAddressMapper.entityToDeletionDto(suspiciousIp);
