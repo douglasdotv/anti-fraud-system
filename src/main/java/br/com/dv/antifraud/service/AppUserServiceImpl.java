@@ -1,6 +1,7 @@
 package br.com.dv.antifraud.service;
 
 import br.com.dv.antifraud.dto.user.*;
+import br.com.dv.antifraud.entity.AppUser;
 import br.com.dv.antifraud.entity.AppUserRole;
 import br.com.dv.antifraud.enums.RoleType;
 import br.com.dv.antifraud.enums.UserOperation;
@@ -9,7 +10,6 @@ import br.com.dv.antifraud.exception.custom.EntityAlreadyExistsException;
 import br.com.dv.antifraud.exception.custom.InvalidRoleException;
 import br.com.dv.antifraud.exception.custom.RoleAlreadyAssignedException;
 import br.com.dv.antifraud.mapper.AppUserMapper;
-import br.com.dv.antifraud.entity.AppUser;
 import br.com.dv.antifraud.repository.AppUserRepository;
 import br.com.dv.antifraud.repository.AppUserRoleRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AppUserServiceImpl implements AppUserService {
@@ -38,11 +37,9 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     @Transactional
     public UserResponse register(UserCreationInfo userCreationInfo) {
-        Optional<AppUser> userOptional = userRepository.findByUsernameIgnoreCase(userCreationInfo.username());
-
-        if (userOptional.isPresent()) {
-            throw new EntityAlreadyExistsException("User already exists!");
-        }
+        userRepository.findByUsernameIgnoreCase(userCreationInfo.username()).ifPresent(user -> {
+            throw new EntityAlreadyExistsException("User already exists.");
+        });
 
         AppUser user = AppUserMapper.dtoToEntity(userCreationInfo);
 
@@ -66,13 +63,9 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public UserDeletionResponse delete(String username) {
-        Optional<AppUser> userOptional = userRepository.findByUsernameIgnoreCase(username);
+        AppUser user = userRepository.findByUsernameIgnoreCase(username)
+                .orElseThrow(() -> new EntityNotFoundException("User not found!"));
 
-        if (userOptional.isEmpty()) {
-            throw new EntityNotFoundException("User not found!");
-        }
-
-        AppUser user = userOptional.get();
         userRepository.delete(user);
 
         return AppUserMapper.entityToDeletionDto(user);
@@ -85,13 +78,8 @@ public class AppUserServiceImpl implements AppUserService {
             throw new InvalidRoleException("Invalid role. The available roles are MERCHANT and SUPPORT.");
         }
 
-        Optional<AppUser> userOptional = userRepository.findByUsernameIgnoreCase(userRoleUpdateInfo.username());
-
-        if (userOptional.isEmpty()) {
-            throw new EntityNotFoundException("User not found!");
-        }
-
-        AppUser user = userOptional.get();
+        AppUser user = userRepository.findByUsernameIgnoreCase(userRoleUpdateInfo.username())
+                .orElseThrow(() -> new EntityNotFoundException("User not found!"));
 
         if (user.getRole().getName().equals(userRoleUpdateInfo.role().name())) {
             throw new RoleAlreadyAssignedException("User already has this role!");
@@ -107,13 +95,8 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     @Transactional
     public UserStatusUpdateResponse changeStatus(UserStatusUpdateInfo userStatusUpdateInfo) {
-        Optional<AppUser> userOptional = userRepository.findByUsernameIgnoreCase(userStatusUpdateInfo.username());
-
-        if (userOptional.isEmpty()) {
-            throw new EntityNotFoundException("User not found!");
-        }
-
-        AppUser user = userOptional.get();
+        AppUser user = userRepository.findByUsernameIgnoreCase(userStatusUpdateInfo.username())
+                .orElseThrow(() -> new EntityNotFoundException("User not found!"));
 
         if (user.getRole().getName().equals(RoleType.ADMINISTRATOR.name())) {
             throw new CannotLockAdminException("Cannot assign LOCK status to ADMIN.");
