@@ -1,4 +1,4 @@
-package br.com.dv.antifraud.dto;
+package br.com.dv.antifraud.dto.ip;
 
 public record SuspiciousIpDeletionResponse(String status) {
 }

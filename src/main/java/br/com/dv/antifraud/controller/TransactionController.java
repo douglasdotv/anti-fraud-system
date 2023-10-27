@@ -1,7 +1,7 @@
 package br.com.dv.antifraud.controller;
 
-import br.com.dv.antifraud.dto.TransactionInfo;
-import br.com.dv.antifraud.dto.TransactionResponse;
+import br.com.dv.antifraud.dto.transaction.TransactionInfo;
+import br.com.dv.antifraud.dto.transaction.TransactionResponse;
 import br.com.dv.antifraud.service.TransactionService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package br.com.dv.antifraud.dto;
+package br.com.dv.antifraud.dto.transaction;
 
 import br.com.dv.antifraud.validation.CardNumber;
 import jakarta.validation.constraints.NotNull;
