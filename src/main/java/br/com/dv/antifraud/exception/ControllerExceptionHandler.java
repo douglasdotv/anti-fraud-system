@@ -1,6 +1,6 @@
 package br.com.dv.antifraud.exception;
 
-import br.com.dv.antifraud.dto.CustomErrorMessage;
+import br.com.dv.antifraud.dto.error.CustomErrorMessage;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;

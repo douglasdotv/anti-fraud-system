@@ -1,8 +1,8 @@
 package br.com.dv.antifraud.service;
 
-import br.com.dv.antifraud.dto.SuspiciousIpDeletionResponse;
-import br.com.dv.antifraud.dto.SuspiciousIpInfo;
-import br.com.dv.antifraud.dto.SuspiciousIpResponse;
+import br.com.dv.antifraud.dto.ip.SuspiciousIpDeletionResponse;
+import br.com.dv.antifraud.dto.ip.SuspiciousIpInfo;
+import br.com.dv.antifraud.dto.ip.SuspiciousIpResponse;
 import br.com.dv.antifraud.entity.SuspiciousIpAddress;
 import br.com.dv.antifraud.exception.SuspiciousIpAddressAlreadyExistsException;
 import br.com.dv.antifraud.mapper.SuspiciousIpAddressMapper;

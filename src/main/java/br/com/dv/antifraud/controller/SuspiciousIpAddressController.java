@@ -1,8 +1,8 @@
 package br.com.dv.antifraud.controller;
 
-import br.com.dv.antifraud.dto.SuspiciousIpDeletionResponse;
-import br.com.dv.antifraud.dto.SuspiciousIpInfo;
-import br.com.dv.antifraud.dto.SuspiciousIpResponse;
+import br.com.dv.antifraud.dto.ip.SuspiciousIpDeletionResponse;
+import br.com.dv.antifraud.dto.ip.SuspiciousIpInfo;
+import br.com.dv.antifraud.dto.ip.SuspiciousIpResponse;
 import br.com.dv.antifraud.service.SuspiciousIpAddressService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;

@@ -1,8 +1,8 @@
 package br.com.dv.antifraud.mapper;
 
-import br.com.dv.antifraud.dto.StolenCardDeletionResponse;
-import br.com.dv.antifraud.dto.StolenCardInfo;
-import br.com.dv.antifraud.dto.StolenCardResponse;
+import br.com.dv.antifraud.dto.card.StolenCardDeletionResponse;
+import br.com.dv.antifraud.dto.card.StolenCardInfo;
+import br.com.dv.antifraud.dto.card.StolenCardResponse;
 import br.com.dv.antifraud.entity.StolenCard;
 
 import java.util.List;
