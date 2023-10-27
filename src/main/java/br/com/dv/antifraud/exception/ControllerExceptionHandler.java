@@ -2,6 +2,7 @@ package br.com.dv.antifraud.exception;
 
 import br.com.dv.antifraud.dto.CustomErrorMessage;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -125,6 +126,28 @@ public class ControllerExceptionHandler {
                 LocalDateTime.now(),
                 request.getDescription(false),
                 Collections.singletonMap("error", ex.getMessage())
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<CustomErrorMessage> handleConstraintViolationException(
+            ConstraintViolationException ex,
+            WebRequest request
+    ) {
+        Map<String, String> fieldErrors = new HashMap<>();
+        ex.getConstraintViolations().forEach(violation -> {
+            String fieldName = violation.getPropertyPath().toString();
+            String errorMessage = violation.getMessage();
+            fieldErrors.put(fieldName, errorMessage);
+        });
+
+        CustomErrorMessage errorResponse = new CustomErrorMessage(
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now(),
+                request.getDescription(false),
+                fieldErrors
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
