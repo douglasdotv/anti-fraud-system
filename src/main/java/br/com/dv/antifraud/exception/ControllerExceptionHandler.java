@@ -86,6 +86,21 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
+    @ExceptionHandler(StolenCardAlreadyExistsException.class)
+    public ResponseEntity<CustomErrorMessage> handleStolenCardAlreadyExistsException(
+            StolenCardAlreadyExistsException ex,
+            WebRequest request
+    ) {
+        CustomErrorMessage errorResponse = new CustomErrorMessage(
+                HttpStatus.CONFLICT.value(),
+                LocalDateTime.now(),
+                request.getDescription(false),
+                Collections.singletonMap("error", ex.getMessage())
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
     @ExceptionHandler(InvalidRoleException.class)
     public ResponseEntity<CustomErrorMessage> handleInvalidRoleException(
             InvalidRoleException ex,
