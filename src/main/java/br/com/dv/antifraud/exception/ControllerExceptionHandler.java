@@ -70,6 +70,21 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
+    @ExceptionHandler(SuspiciousIpAddressAlreadyExistsException.class)
+    public ResponseEntity<CustomErrorMessage> handleSuspiciousIpAddressAlreadyExistsException(
+            SuspiciousIpAddressAlreadyExistsException ex,
+            WebRequest request
+    ) {
+        CustomErrorMessage errorResponse = new CustomErrorMessage(
+                HttpStatus.CONFLICT.value(),
+                LocalDateTime.now(),
+                request.getDescription(false),
+                Collections.singletonMap("error", ex.getMessage())
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
     @ExceptionHandler(InvalidRoleException.class)
     public ResponseEntity<CustomErrorMessage> handleInvalidRoleException(
             InvalidRoleException ex,
