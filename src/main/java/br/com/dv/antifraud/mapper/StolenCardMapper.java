@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 
 public class StolenCardMapper {
 
+    private static final String CARD_REMOVAL_STATUS = "Card %s successfully removed!";
+
     public static StolenCard dtoToEntity(StolenCardInfo cardInfo) {
         StolenCard card = new StolenCard();
         card.setCardNumber(cardInfo.number());
@@ -27,7 +29,7 @@ public class StolenCardMapper {
     }
 
     public static StolenCardDeletionResponse entityToDeletionDto(StolenCard card) {
-        String deletionStatus = String.format("Card %s successfully removed!", card.getCardNumber());
+        String deletionStatus = String.format(CARD_REMOVAL_STATUS, card.getCardNumber());
         return new StolenCardDeletionResponse(deletionStatus);
     }
 

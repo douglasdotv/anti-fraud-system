@@ -14,6 +14,10 @@ import java.util.List;
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
+    private static final String NONE = "none";
+    private static final String AMOUNT = "amount";
+    private static final String CARD_NUMBER = "card-number";
+    private static final String IP = "ip";
     private final SuspiciousIpAddressRepository suspiciousIpRepository;
     private final StolenCardRepository stolenCardRepository;
 
@@ -54,14 +58,14 @@ public class TransactionServiceImpl implements TransactionService {
     private String getInfo(TransactionResult result, Long amount, boolean stolenCard, boolean suspiciousIp) {
         switch (result) {
             case ALLOWED:
-                return "none";
+                return NONE;
             case MANUAL_PROCESSING:
-                return "amount";
+                return AMOUNT;
             case PROHIBITED:
                 List<String> reasons = new ArrayList<>();
-                if (amount > 1500) reasons.add("amount");
-                if (stolenCard) reasons.add("card-number");
-                if (suspiciousIp) reasons.add("ip");
+                if (amount > 1500) reasons.add(AMOUNT);
+                if (stolenCard) reasons.add(CARD_NUMBER);
+                if (suspiciousIp) reasons.add(IP);
                 return String.join(", ", reasons);
             default:
                 return "";
