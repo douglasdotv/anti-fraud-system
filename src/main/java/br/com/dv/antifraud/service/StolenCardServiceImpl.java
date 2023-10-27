@@ -4,7 +4,7 @@ import br.com.dv.antifraud.dto.card.StolenCardDeletionResponse;
 import br.com.dv.antifraud.dto.card.StolenCardInfo;
 import br.com.dv.antifraud.dto.card.StolenCardResponse;
 import br.com.dv.antifraud.entity.StolenCard;
-import br.com.dv.antifraud.exception.StolenCardAlreadyExistsException;
+import br.com.dv.antifraud.exception.custom.EntityAlreadyExistsException;
 import br.com.dv.antifraud.mapper.StolenCardMapper;
 import br.com.dv.antifraud.repository.StolenCardRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -29,7 +29,7 @@ public class StolenCardServiceImpl implements StolenCardService {
         Optional<StolenCard> stolenCardOptional = cardRepository.findByCardNumber(cardInfo.number());
 
         if (stolenCardOptional.isPresent()) {
-            throw new StolenCardAlreadyExistsException("Stolen card already exists!");
+            throw new EntityAlreadyExistsException("Stolen card already exists!");
         }
 
         StolenCard stolenCard = StolenCardMapper.dtoToEntity(cardInfo);
