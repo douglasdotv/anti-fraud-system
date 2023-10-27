@@ -27,7 +27,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(readOnly = true)
     public TransactionResponse processTransaction(TransactionInfo transactionInfo) {
         Long amount = transactionInfo.amount();
-        TransactionResult result = TransactionResult.fromAmount(amount);
+        TransactionResult result = determineTransactionResult(amount);
 
         boolean isStolenCard = stolenCardRepository.findByCardNumber(transactionInfo.number()).isPresent();
         boolean isSuspiciousIp = suspiciousIpRepository.findByIpAddress(transactionInfo.ip()).isPresent();
@@ -41,26 +41,30 @@ public class TransactionServiceImpl implements TransactionService {
         return new TransactionResponse(result.name(), info);
     }
 
+    private TransactionResult determineTransactionResult(Long amount) {
+        if (amount <= 200) {
+            return TransactionResult.ALLOWED;
+        } else if (amount <= 1500) {
+            return TransactionResult.MANUAL_PROCESSING;
+        } else {
+            return TransactionResult.PROHIBITED;
+        }
+    }
+
     private String getInfo(TransactionResult result, Long amount, boolean stolenCard, boolean suspiciousIp) {
         switch (result) {
-            case ALLOWED -> {
+            case ALLOWED:
                 return "none";
-            }
-            case MANUAL_PROCESSING -> {
+            case MANUAL_PROCESSING:
                 return "amount";
-            }
-            case PROHIBITED -> {
+            case PROHIBITED:
                 List<String> reasons = new ArrayList<>();
-
                 if (amount > 1500) reasons.add("amount");
                 if (stolenCard) reasons.add("card-number");
                 if (suspiciousIp) reasons.add("ip");
-
                 return String.join(", ", reasons);
-            }
-            default -> {
+            default:
                 return "";
-            }
         }
     }
 
