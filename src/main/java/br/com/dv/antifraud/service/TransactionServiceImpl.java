@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
+    private static final int ALLOWED_MAX_AMOUNT = 200;
+    private static final int MANUAL_PROCESSING_MAX_AMOUNT = 1500;
+
     private final SuspiciousIpAddressRepository suspiciousIpRepository;
     private final StolenCardRepository stolenCardRepository;
 
@@ -41,9 +44,9 @@ public class TransactionServiceImpl implements TransactionService {
     private TransactionResult getTransactionResult(Long amount, boolean stolenCard, boolean suspiciousIp) {
         if (stolenCard || suspiciousIp) {
             return TransactionResult.PROHIBITED;
-        } else if (amount <= 200) {
+        } else if (amount <= ALLOWED_MAX_AMOUNT) {
             return TransactionResult.ALLOWED;
-        } else if (amount <= 1500) {
+        } else if (amount <= MANUAL_PROCESSING_MAX_AMOUNT) {
             return TransactionResult.MANUAL_PROCESSING;
         } else {
             return TransactionResult.PROHIBITED;
@@ -58,7 +61,7 @@ public class TransactionServiceImpl implements TransactionService {
                 return TransactionInfo.AMOUNT.getValue();
             case PROHIBITED:
                 List<TransactionInfo> reasons = new ArrayList<>();
-                if (amount > 1500) reasons.add(TransactionInfo.AMOUNT);
+                if (amount > MANUAL_PROCESSING_MAX_AMOUNT) reasons.add(TransactionInfo.AMOUNT);
                 if (stolenCard) reasons.add(TransactionInfo.CARD_NUMBER);
                 if (suspiciousIp) reasons.add(TransactionInfo.IP);
                 return reasons.stream().map(TransactionInfo::getValue).collect(Collectors.joining(", "));
