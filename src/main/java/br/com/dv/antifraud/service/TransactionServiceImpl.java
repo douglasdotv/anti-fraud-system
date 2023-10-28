@@ -32,22 +32,19 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(readOnly = true)
     public TransactionResponse processTransaction(TransactionInfo transactionInfo) {
         Long amount = transactionInfo.amount();
-        TransactionResult result = determineTransactionResult(amount);
-
         boolean isStolenCard = stolenCardRepository.findByCardNumber(transactionInfo.number()).isPresent();
         boolean isSuspiciousIp = suspiciousIpRepository.findByIpAddress(transactionInfo.ip()).isPresent();
 
-        if (isStolenCard || isSuspiciousIp) {
-            result = TransactionResult.PROHIBITED;
-        }
-
+        TransactionResult result = getTransactionResult(amount, isStolenCard, isSuspiciousIp);
         String info = getTransactionInfo(result, amount, isStolenCard, isSuspiciousIp);
 
         return new TransactionResponse(result.name(), info);
     }
 
-    private TransactionResult determineTransactionResult(Long amount) {
-        if (amount <= 200) {
+    private TransactionResult getTransactionResult(Long amount, boolean stolenCard, boolean suspiciousIp) {
+        if (stolenCard || suspiciousIp) {
+            return TransactionResult.PROHIBITED;
+        } else if (amount <= 200) {
             return TransactionResult.ALLOWED;
         } else if (amount <= 1500) {
             return TransactionResult.MANUAL_PROCESSING;
