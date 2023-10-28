@@ -36,12 +36,12 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     @Transactional
-    public UserResponse register(UserCreationInfo userCreationInfo) {
-        userRepository.findByUsernameIgnoreCase(userCreationInfo.username()).ifPresent(user -> {
+    public UserResponse register(UserRegistrationRequest request) {
+        userRepository.findByUsernameIgnoreCase(request.username()).ifPresent(user -> {
             throw new EntityAlreadyExistsException("User already exists.");
         });
 
-        AppUser user = AppUserMapper.dtoToEntity(userCreationInfo);
+        AppUser user = AppUserMapper.dtoToEntity(request);
 
         user.setPassword(encoder.encode(user.getPassword()));
 
@@ -73,19 +73,19 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     @Transactional
-    public UserResponse changeRole(UserRoleUpdateInfo userRoleUpdateInfo) {
-        if (userRoleUpdateInfo.role().equals(RoleType.ADMINISTRATOR)) {
+    public UserResponse changeRole(UserRoleUpdateRequest request) {
+        if (request.role().equals(RoleType.ADMINISTRATOR)) {
             throw new InvalidRoleException("Invalid role. The available roles are MERCHANT and SUPPORT.");
         }
 
-        AppUser user = userRepository.findByUsernameIgnoreCase(userRoleUpdateInfo.username())
+        AppUser user = userRepository.findByUsernameIgnoreCase(request.username())
                 .orElseThrow(() -> new EntityNotFoundException("User not found!"));
 
-        if (user.getRole().getName().equals(userRoleUpdateInfo.role().name())) {
+        if (user.getRole().getName().equals(request.role().name())) {
             throw new RoleAlreadyAssignedException("User already has this role!");
         }
 
-        AppUserRole userRole = getOrCreateRole(userRoleUpdateInfo.role());
+        AppUserRole userRole = getOrCreateRole(request.role());
         user.setRole(userRole);
 
         AppUser savedUser = userRepository.save(user);
@@ -94,15 +94,15 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     @Transactional
-    public UserStatusUpdateResponse changeStatus(UserStatusUpdateInfo userStatusUpdateInfo) {
-        AppUser user = userRepository.findByUsernameIgnoreCase(userStatusUpdateInfo.username())
+    public UserStatusUpdateResponse changeStatus(UserStatusUpdateRequest request) {
+        AppUser user = userRepository.findByUsernameIgnoreCase(request.username())
                 .orElseThrow(() -> new EntityNotFoundException("User not found!"));
 
         if (user.getRole().getName().equals(RoleType.ADMINISTRATOR.name())) {
             throw new CannotLockAdminException("Cannot assign LOCK status to ADMIN.");
         }
 
-        user.setLocked(userStatusUpdateInfo.operation().equals(UserOperation.LOCK));
+        user.setLocked(request.operation().equals(UserOperation.LOCK));
 
         AppUser savedUser = userRepository.save(user);
         return AppUserMapper.entityToStatusUpdateDto(savedUser);

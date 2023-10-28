@@ -6,14 +6,14 @@ import java.util.List;
 
 public interface AppUserService {
 
-    UserResponse register(UserCreationInfo userCreationInfo);
+    UserResponse register(UserRegistrationRequest request);
 
     List<UserResponse> findAll();
 
     UserDeletionResponse delete(String username);
 
-    UserResponse changeRole(UserRoleUpdateInfo roleUpdateInfo);
+    UserResponse changeRole(UserRoleUpdateRequest request);
 
-    UserStatusUpdateResponse changeStatus(UserStatusUpdateInfo userStatusUpdateInfo);
+    UserStatusUpdateResponse changeStatus(UserStatusUpdateRequest request);
 
 }

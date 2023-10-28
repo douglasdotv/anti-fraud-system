@@ -1,7 +1,7 @@
 package br.com.dv.antifraud.service;
 
 import br.com.dv.antifraud.dto.card.StolenCardDeletionResponse;
-import br.com.dv.antifraud.dto.card.StolenCardInfo;
+import br.com.dv.antifraud.dto.card.StolenCardRequest;
 import br.com.dv.antifraud.dto.card.StolenCardResponse;
 import br.com.dv.antifraud.entity.StolenCard;
 import br.com.dv.antifraud.exception.custom.EntityAlreadyExistsException;
@@ -24,12 +24,12 @@ public class StolenCardServiceImpl implements StolenCardService {
 
     @Override
     @Transactional
-    public StolenCardResponse saveStolenCard(StolenCardInfo cardInfo) {
-        cardRepository.findByCardNumber(cardInfo.number()).ifPresent(card -> {
+    public StolenCardResponse saveStolenCard(StolenCardRequest request) {
+        cardRepository.findByCardNumber(request.number()).ifPresent(card -> {
             throw new EntityAlreadyExistsException("Stolen card already exists.");
         });
 
-        StolenCard stolenCard = StolenCardMapper.dtoToEntity(cardInfo);
+        StolenCard stolenCard = StolenCardMapper.dtoToEntity(request);
         StolenCard savedStolenCard = cardRepository.save(stolenCard);
 
         return StolenCardMapper.entityToDto(savedStolenCard);

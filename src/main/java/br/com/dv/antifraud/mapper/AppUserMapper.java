@@ -1,6 +1,6 @@
 package br.com.dv.antifraud.mapper;
 
-import br.com.dv.antifraud.dto.user.UserCreationInfo;
+import br.com.dv.antifraud.dto.user.UserRegistrationRequest;
 import br.com.dv.antifraud.dto.user.UserResponse;
 import br.com.dv.antifraud.dto.user.UserDeletionResponse;
 import br.com.dv.antifraud.dto.user.UserStatusUpdateResponse;
@@ -15,7 +15,7 @@ public class AppUserMapper {
     private static final String LOCKED = "locked";
     private static final String UNLOCKED = "unlocked";
 
-    public static AppUser dtoToEntity(UserCreationInfo creationInfo) {
+    public static AppUser dtoToEntity(UserRegistrationRequest creationInfo) {
         AppUser user = new AppUser();
         user.setName(creationInfo.name());
         user.setUsername(creationInfo.username());

@@ -1,6 +1,6 @@
 package br.com.dv.antifraud.controller;
 
-import br.com.dv.antifraud.dto.transaction.TransactionInfo;
+import br.com.dv.antifraud.dto.transaction.TransactionRequest;
 import br.com.dv.antifraud.dto.transaction.TransactionResponse;
 import br.com.dv.antifraud.service.TransactionService;
 import jakarta.validation.Valid;
@@ -21,8 +21,8 @@ public class TransactionController {
     }
 
     @PostMapping("/transaction")
-    public ResponseEntity<TransactionResponse> processTransaction(@Valid @RequestBody TransactionInfo transaction) {
-        TransactionResponse response = transactionService.processTransaction(transaction);
+    public ResponseEntity<TransactionResponse> processTransaction(@Valid @RequestBody TransactionRequest request) {
+        TransactionResponse response = transactionService.processTransaction(request);
         return ResponseEntity.ok(response);
     }
 
