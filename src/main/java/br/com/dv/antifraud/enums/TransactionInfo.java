@@ -8,7 +8,9 @@ public enum TransactionInfo {
     AMOUNT("amount"),
     CARD_NUMBER("card-number"),
     IP("ip"),
-    NONE("none");
+    IP_CORRELATION("ip-correlation"),
+    NONE("none"),
+    REGION_CORRELATION("region-correlation");
 
     private final String value;
 
