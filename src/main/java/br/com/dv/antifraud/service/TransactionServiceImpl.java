@@ -2,6 +2,7 @@ package br.com.dv.antifraud.service;
 
 import br.com.dv.antifraud.dto.transaction.TransactionRequest;
 import br.com.dv.antifraud.dto.transaction.TransactionResponse;
+import br.com.dv.antifraud.enums.TransactionInfo;
 import br.com.dv.antifraud.enums.TransactionResult;
 import br.com.dv.antifraud.repository.StolenCardRepository;
 import br.com.dv.antifraud.repository.SuspiciousIpAddressRepository;
@@ -9,16 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
 
-    private static final String NONE = "none";
-    private static final String AMOUNT = "amount";
-    private static final String CARD_NUMBER = "card-number";
-    private static final String IP = "ip";
     private final SuspiciousIpAddressRepository suspiciousIpRepository;
     private final StolenCardRepository stolenCardRepository;
 
@@ -56,20 +53,15 @@ public class TransactionServiceImpl implements TransactionService {
     private String getTransactionInfo(TransactionResult res, Long amount, boolean stolenCard, boolean suspiciousIp) {
         switch (res) {
             case ALLOWED:
-                return NONE;
+                return TransactionInfo.NONE.getValue();
             case MANUAL_PROCESSING:
-                return AMOUNT;
+                return TransactionInfo.AMOUNT.getValue();
             case PROHIBITED:
-                List<String> reasons = new ArrayList<>();
-
-                if (amount > 1500) reasons.add(AMOUNT);
-                if (stolenCard) reasons.add(CARD_NUMBER);
-                if (suspiciousIp) reasons.add(IP);
-
-                // Sorting just in case future updates mess with the order
-                Collections.sort(reasons);
-
-                return String.join(", ", reasons);
+                List<TransactionInfo> reasons = new ArrayList<>();
+                if (amount > 1500) reasons.add(TransactionInfo.AMOUNT);
+                if (stolenCard) reasons.add(TransactionInfo.CARD_NUMBER);
+                if (suspiciousIp) reasons.add(TransactionInfo.IP);
+                return reasons.stream().map(TransactionInfo::getValue).collect(Collectors.joining(", "));
             default:
                 return "";
         }
