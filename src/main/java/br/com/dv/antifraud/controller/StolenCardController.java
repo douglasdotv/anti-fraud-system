@@ -1,7 +1,7 @@
 package br.com.dv.antifraud.controller;
 
 import br.com.dv.antifraud.dto.card.StolenCardDeletionResponse;
-import br.com.dv.antifraud.dto.card.StolenCardInfo;
+import br.com.dv.antifraud.dto.card.StolenCardRequest;
 import br.com.dv.antifraud.dto.card.StolenCardResponse;
 import br.com.dv.antifraud.service.StolenCardService;
 import br.com.dv.antifraud.validation.CardNumber;
@@ -24,8 +24,8 @@ public class StolenCardController {
     }
 
     @PostMapping("/stolencard")
-    public ResponseEntity<StolenCardResponse> saveStolenCard(@Valid @RequestBody StolenCardInfo ipInfo) {
-        StolenCardResponse response = cardService.saveStolenCard(ipInfo);
+    public ResponseEntity<StolenCardResponse> saveStolenCard(@Valid @RequestBody StolenCardRequest request) {
+        StolenCardResponse response = cardService.saveStolenCard(request);
         return ResponseEntity.ok(response);
     }
 

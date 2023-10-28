@@ -1,7 +1,7 @@
 package br.com.dv.antifraud.controller;
 
 import br.com.dv.antifraud.dto.ip.SuspiciousIpDeletionResponse;
-import br.com.dv.antifraud.dto.ip.SuspiciousIpInfo;
+import br.com.dv.antifraud.dto.ip.SuspiciousIpRequest;
 import br.com.dv.antifraud.dto.ip.SuspiciousIpResponse;
 import br.com.dv.antifraud.service.SuspiciousIpAddressService;
 import jakarta.validation.Valid;
@@ -24,8 +24,8 @@ public class SuspiciousIpAddressController {
     }
 
     @PostMapping("/suspicious-ip")
-    public ResponseEntity<SuspiciousIpResponse> saveSuspiciousIp(@Valid @RequestBody SuspiciousIpInfo ipInfo) {
-        SuspiciousIpResponse response = ipService.saveSuspiciousIp(ipInfo);
+    public ResponseEntity<SuspiciousIpResponse> saveSuspiciousIp(@Valid @RequestBody SuspiciousIpRequest request) {
+        SuspiciousIpResponse response = ipService.saveSuspiciousIp(request);
         return ResponseEntity.ok(response);
     }
 

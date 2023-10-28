@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 
-public record TransactionInfo(
+public record TransactionRequest(
         @NotNull(message = "Amount is required.")
         @Positive(message = "Amount must be positive.")
         Long amount,
