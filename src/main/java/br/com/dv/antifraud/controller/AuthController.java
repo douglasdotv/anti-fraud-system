@@ -21,9 +21,9 @@ public class AuthController {
     }
 
     @PostMapping("/user")
-    public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody UserCreationInfo creationInfo,
+    public ResponseEntity<UserResponse> registerUser(@Valid @RequestBody UserRegistrationRequest request,
                                                      UriComponentsBuilder uriBuilder) {
-        UserResponse response = userService.register(creationInfo);
+        UserResponse response = userService.register(request);
         URI uri = uriBuilder.path("/user/{id}").buildAndExpand(response.id()).toUri();
         return ResponseEntity.created(uri).body(response);
     }
@@ -41,14 +41,14 @@ public class AuthController {
     }
 
     @PutMapping("/role")
-    public ResponseEntity<UserResponse> changeRole(@RequestBody UserRoleUpdateInfo roleUpdateInfo) {
-        UserResponse response = userService.changeRole(roleUpdateInfo);
+    public ResponseEntity<UserResponse> changeRole(@RequestBody UserRoleUpdateRequest request) {
+        UserResponse response = userService.changeRole(request);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/access")
-    public ResponseEntity<UserStatusUpdateResponse> changeStatus(@RequestBody UserStatusUpdateInfo statusUpdateInfo) {
-        UserStatusUpdateResponse response = userService.changeStatus(statusUpdateInfo);
+    public ResponseEntity<UserStatusUpdateResponse> changeStatus(@RequestBody UserStatusUpdateRequest request) {
+        UserStatusUpdateResponse response = userService.changeStatus(request);
         return ResponseEntity.ok(response);
     }
 

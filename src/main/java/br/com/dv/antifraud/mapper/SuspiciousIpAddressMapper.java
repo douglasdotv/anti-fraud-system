@@ -1,7 +1,7 @@
 package br.com.dv.antifraud.mapper;
 
 import br.com.dv.antifraud.dto.ip.SuspiciousIpDeletionResponse;
-import br.com.dv.antifraud.dto.ip.SuspiciousIpInfo;
+import br.com.dv.antifraud.dto.ip.SuspiciousIpRequest;
 import br.com.dv.antifraud.dto.ip.SuspiciousIpResponse;
 import br.com.dv.antifraud.entity.SuspiciousIpAddress;
 
@@ -12,7 +12,7 @@ public class SuspiciousIpAddressMapper {
 
     private static final String IP_REMOVAL_STATUS = "IP %s successfully removed!";
 
-    public static SuspiciousIpAddress dtoToEntity(SuspiciousIpInfo ipInfo) {
+    public static SuspiciousIpAddress dtoToEntity(SuspiciousIpRequest ipInfo) {
         SuspiciousIpAddress ipAddress = new SuspiciousIpAddress();
         ipAddress.setIpAddress(ipInfo.ip());
         return ipAddress;

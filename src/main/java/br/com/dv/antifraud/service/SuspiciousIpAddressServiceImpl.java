@@ -1,7 +1,7 @@
 package br.com.dv.antifraud.service;
 
 import br.com.dv.antifraud.dto.ip.SuspiciousIpDeletionResponse;
-import br.com.dv.antifraud.dto.ip.SuspiciousIpInfo;
+import br.com.dv.antifraud.dto.ip.SuspiciousIpRequest;
 import br.com.dv.antifraud.dto.ip.SuspiciousIpResponse;
 import br.com.dv.antifraud.entity.SuspiciousIpAddress;
 import br.com.dv.antifraud.exception.custom.EntityAlreadyExistsException;
@@ -24,12 +24,12 @@ public class SuspiciousIpAddressServiceImpl implements SuspiciousIpAddressServic
 
     @Override
     @Transactional
-    public SuspiciousIpResponse saveSuspiciousIp(SuspiciousIpInfo ipInfo) {
-        ipRepository.findByIpAddress(ipInfo.ip()).ifPresent(suspiciousIp -> {
+    public SuspiciousIpResponse saveSuspiciousIp(SuspiciousIpRequest request) {
+        ipRepository.findByIpAddress(request.ip()).ifPresent(ip -> {
             throw new EntityAlreadyExistsException("Suspicious IP address already exists.");
         });
 
-        SuspiciousIpAddress suspiciousIp = SuspiciousIpAddressMapper.dtoToEntity(ipInfo);
+        SuspiciousIpAddress suspiciousIp = SuspiciousIpAddressMapper.dtoToEntity(request);
         SuspiciousIpAddress savedSuspiciousIp = ipRepository.save(suspiciousIp);
 
         return SuspiciousIpAddressMapper.entityToDto(savedSuspiciousIp);

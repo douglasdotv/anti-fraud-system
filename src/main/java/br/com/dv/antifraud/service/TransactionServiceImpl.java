@@ -1,6 +1,6 @@
 package br.com.dv.antifraud.service;
 
-import br.com.dv.antifraud.dto.transaction.TransactionInfo;
+import br.com.dv.antifraud.dto.transaction.TransactionRequest;
 import br.com.dv.antifraud.dto.transaction.TransactionResponse;
 import br.com.dv.antifraud.enums.TransactionResult;
 import br.com.dv.antifraud.repository.StolenCardRepository;
@@ -30,10 +30,10 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional(readOnly = true)
-    public TransactionResponse processTransaction(TransactionInfo transactionInfo) {
-        Long amount = transactionInfo.amount();
-        boolean isStolenCard = stolenCardRepository.findByCardNumber(transactionInfo.number()).isPresent();
-        boolean isSuspiciousIp = suspiciousIpRepository.findByIpAddress(transactionInfo.ip()).isPresent();
+    public TransactionResponse processTransaction(TransactionRequest request) {
+        Long amount = request.amount();
+        boolean isStolenCard = stolenCardRepository.findByCardNumber(request.number()).isPresent();
+        boolean isSuspiciousIp = suspiciousIpRepository.findByIpAddress(request.ip()).isPresent();
 
         TransactionResult result = getTransactionResult(amount, isStolenCard, isSuspiciousIp);
         String info = getTransactionInfo(result, amount, isStolenCard, isSuspiciousIp);
