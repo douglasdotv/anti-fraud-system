@@ -1,4 +1,4 @@
-package br.com.dv.antifraud.service;
+package br.com.dv.antifraud.service.user;
 
 import br.com.dv.antifraud.dto.user.*;
 import br.com.dv.antifraud.entity.AppUser;

@@ -1,4 +1,4 @@
-package br.com.dv.antifraud.service;
+package br.com.dv.antifraud.service.ip;
 
 import br.com.dv.antifraud.dto.ip.SuspiciousIpDeletionResponse;
 import br.com.dv.antifraud.dto.ip.SuspiciousIpRequest;

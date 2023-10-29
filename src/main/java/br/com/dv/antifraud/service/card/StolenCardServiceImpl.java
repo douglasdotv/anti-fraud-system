@@ -1,4 +1,4 @@
-package br.com.dv.antifraud.service;
+package br.com.dv.antifraud.service.card;
 
 import br.com.dv.antifraud.dto.card.StolenCardDeletionResponse;
 import br.com.dv.antifraud.dto.card.StolenCardRequest;
