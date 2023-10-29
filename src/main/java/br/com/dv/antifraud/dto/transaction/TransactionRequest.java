@@ -2,6 +2,7 @@ package br.com.dv.antifraud.dto.transaction;
 
 import br.com.dv.antifraud.enums.WorldRegion;
 import br.com.dv.antifraud.validation.CardNumber;
+import br.com.dv.antifraud.validation.EnumValue;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
@@ -17,7 +18,9 @@ public record TransactionRequest(
         String ip,
         @CardNumber
         String number,
-        @NotNull(message = "Invalid region. The available regions are: EAP, ECA, HIC, LAC, MENA, SA and SSA.")
+        @EnumValue(
+                enumClass = WorldRegion.class,
+                message = "Invalid region. The available regions are: EAP, ECA, HIC, LAC, MENA, SA and SSA.")
         WorldRegion region,
         @PastOrPresent(message = "Date must be in the past or present.")
         LocalDateTime date
