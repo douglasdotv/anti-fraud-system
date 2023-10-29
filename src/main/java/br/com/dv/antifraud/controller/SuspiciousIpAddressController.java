@@ -3,7 +3,7 @@ package br.com.dv.antifraud.controller;
 import br.com.dv.antifraud.dto.ip.SuspiciousIpDeletionResponse;
 import br.com.dv.antifraud.dto.ip.SuspiciousIpRequest;
 import br.com.dv.antifraud.dto.ip.SuspiciousIpResponse;
-import br.com.dv.antifraud.service.SuspiciousIpAddressService;
+import br.com.dv.antifraud.service.ip.SuspiciousIpAddressService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.http.ResponseEntity;

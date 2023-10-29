@@ -1,7 +1,7 @@
 package br.com.dv.antifraud.controller;
 
 import br.com.dv.antifraud.dto.user.*;
-import br.com.dv.antifraud.service.AppUserService;
+import br.com.dv.antifraud.service.user.AppUserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
