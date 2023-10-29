@@ -9,6 +9,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,6 +33,7 @@ public class GlobalExceptionHandler {
         EXCEPTION_STATUS_MAP.put(RoleAlreadyAssignedException.class, HttpStatus.CONFLICT);
         EXCEPTION_STATUS_MAP.put(CannotLockAdminException.class, HttpStatus.BAD_REQUEST);
         EXCEPTION_STATUS_MAP.put(ConstraintViolationException.class, HttpStatus.BAD_REQUEST);
+        EXCEPTION_STATUS_MAP.put(HttpMessageNotReadableException.class, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = {
@@ -41,7 +43,8 @@ public class GlobalExceptionHandler {
             InvalidRoleException.class,
             RoleAlreadyAssignedException.class,
             CannotLockAdminException.class,
-            ConstraintViolationException.class
+            ConstraintViolationException.class,
+            HttpMessageNotReadableException.class
     })
     public ResponseEntity<CustomErrorMessage> handleException(Exception ex, WebRequest request) {
         HttpStatus status = EXCEPTION_STATUS_MAP.getOrDefault(ex.getClass(), HttpStatus.INTERNAL_SERVER_ERROR);
