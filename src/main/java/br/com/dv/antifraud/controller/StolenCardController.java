@@ -3,7 +3,7 @@ package br.com.dv.antifraud.controller;
 import br.com.dv.antifraud.dto.card.StolenCardDeletionResponse;
 import br.com.dv.antifraud.dto.card.StolenCardRequest;
 import br.com.dv.antifraud.dto.card.StolenCardResponse;
-import br.com.dv.antifraud.service.StolenCardService;
+import br.com.dv.antifraud.service.card.StolenCardService;
 import br.com.dv.antifraud.validation.CardNumber;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
