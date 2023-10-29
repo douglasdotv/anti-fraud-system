@@ -22,6 +22,7 @@ public record TransactionRequest(
                 enumClass = WorldRegion.class,
                 message = "Invalid region. The available regions are: EAP, ECA, HIC, LAC, MENA, SA and SSA.")
         WorldRegion region,
+        @NotNull(message = "Date cannot be null.")
         @PastOrPresent(message = "Date must be in the past or present.")
         LocalDateTime date
 ) {
