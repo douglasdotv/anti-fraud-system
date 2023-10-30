@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.ROLE_PREFIX;
+
 public class AppUserAdapter implements UserDetails {
 
     private final AppUser user;
@@ -18,7 +20,7 @@ public class AppUserAdapter implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole().getName()));
+        return Collections.singletonList(new SimpleGrantedAuthority(ROLE_PREFIX + user.getRole().getName()));
     }
 
     @Override

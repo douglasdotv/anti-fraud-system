@@ -13,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.STOLEN_CARD_ALREADY_EXISTS_MESSAGE;
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.STOLEN_CARD_NOT_FOUND_MESSAGE;
+
 @Service
 public class StolenCardServiceImpl implements StolenCardService {
 
@@ -26,7 +29,7 @@ public class StolenCardServiceImpl implements StolenCardService {
     @Transactional
     public StolenCardResponse saveStolenCard(StolenCardRequest request) {
         cardRepository.findByCardNumber(request.number()).ifPresent(card -> {
-            throw new EntityAlreadyExistsException("Stolen card already exists.");
+            throw new EntityAlreadyExistsException(STOLEN_CARD_ALREADY_EXISTS_MESSAGE);
         });
 
         StolenCard stolenCard = StolenCardMapper.dtoToEntity(request);
@@ -39,7 +42,7 @@ public class StolenCardServiceImpl implements StolenCardService {
     @Transactional
     public StolenCardDeletionResponse deleteStolenCard(String cardNumber) {
         StolenCard stolenCard = cardRepository.findByCardNumber(cardNumber)
-                .orElseThrow(() -> new EntityNotFoundException("Stolen card not found!"));
+                .orElseThrow(() -> new EntityNotFoundException(STOLEN_CARD_NOT_FOUND_MESSAGE));
 
         cardRepository.delete(stolenCard);
 

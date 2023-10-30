@@ -1,5 +1,6 @@
 package br.com.dv.antifraud.mapper;
 
+import br.com.dv.antifraud.constants.AntifraudSystemConstants;
 import br.com.dv.antifraud.dto.card.StolenCardDeletionResponse;
 import br.com.dv.antifraud.dto.card.StolenCardRequest;
 import br.com.dv.antifraud.dto.card.StolenCardResponse;
@@ -9,8 +10,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class StolenCardMapper {
-
-    private static final String CARD_REMOVAL_STATUS = "Card %s successfully removed!";
 
     public static StolenCard dtoToEntity(StolenCardRequest cardInfo) {
         StolenCard card = new StolenCard();
@@ -29,7 +28,7 @@ public class StolenCardMapper {
     }
 
     public static StolenCardDeletionResponse entityToDeletionDto(StolenCard card) {
-        String deletionStatus = String.format(CARD_REMOVAL_STATUS, card.getCardNumber());
+        String deletionStatus = String.format(AntifraudSystemConstants.CARD_REMOVAL_TEMPLATE, card.getCardNumber());
         return new StolenCardDeletionResponse(deletionStatus);
     }
 
