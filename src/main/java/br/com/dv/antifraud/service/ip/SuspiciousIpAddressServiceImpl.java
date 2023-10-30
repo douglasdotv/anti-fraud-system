@@ -13,6 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.SUSPICIOUS_IP_ADDRESS_ALREADY_EXISTS_MESSAGE;
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.SUSPICIOUS_IP_ADDRESS_NOT_FOUND_MESSAGE;
+
 @Service
 public class SuspiciousIpAddressServiceImpl implements SuspiciousIpAddressService {
 
@@ -26,7 +29,7 @@ public class SuspiciousIpAddressServiceImpl implements SuspiciousIpAddressServic
     @Transactional
     public SuspiciousIpResponse saveSuspiciousIp(SuspiciousIpRequest request) {
         ipRepository.findByIpAddress(request.ip()).ifPresent(ip -> {
-            throw new EntityAlreadyExistsException("Suspicious IP address already exists.");
+            throw new EntityAlreadyExistsException(SUSPICIOUS_IP_ADDRESS_ALREADY_EXISTS_MESSAGE);
         });
 
         SuspiciousIpAddress suspiciousIp = SuspiciousIpAddressMapper.dtoToEntity(request);
@@ -39,7 +42,7 @@ public class SuspiciousIpAddressServiceImpl implements SuspiciousIpAddressServic
     @Transactional
     public SuspiciousIpDeletionResponse deleteSuspiciousIp(String ip) {
         SuspiciousIpAddress suspiciousIp = ipRepository.findByIpAddress(ip)
-                .orElseThrow(() -> new EntityNotFoundException("Suspicious IP address not found."));
+                .orElseThrow(() -> new EntityNotFoundException(SUSPICIOUS_IP_ADDRESS_NOT_FOUND_MESSAGE));
 
         ipRepository.delete(suspiciousIp);
 

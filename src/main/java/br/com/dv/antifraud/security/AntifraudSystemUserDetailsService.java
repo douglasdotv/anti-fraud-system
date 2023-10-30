@@ -6,6 +6,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.USER_NOT_FOUND_MESSAGE;
+
 @Service
 public class AntifraudSystemUserDetailsService implements UserDetailsService {
 
@@ -19,7 +21,7 @@ public class AntifraudSystemUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsernameIgnoreCase(username)
                 .map(AppUserAdapter::new)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND_MESSAGE));
     }
 
 }

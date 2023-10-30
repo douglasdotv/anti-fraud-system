@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.INVALID_IPV4_MESSAGE;
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.IPV4_REGEX;
+
 @RestController
 @RequestMapping("/api/antifraud")
 @Validated
@@ -32,10 +35,7 @@ public class SuspiciousIpAddressController {
     @DeleteMapping("/suspicious-ip/{ip}")
     public ResponseEntity<SuspiciousIpDeletionResponse> deleteSuspiciousIp(
             @PathVariable
-            @Pattern(
-                    regexp = "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)(\\.(?!$)|$)){4}$",
-                    message = "Invalid IPv4 format."
-            )
+            @Pattern(regexp = IPV4_REGEX, message = INVALID_IPV4_MESSAGE)
             String ip
     ) {
         SuspiciousIpDeletionResponse response = ipService.deleteSuspiciousIp(ip);
