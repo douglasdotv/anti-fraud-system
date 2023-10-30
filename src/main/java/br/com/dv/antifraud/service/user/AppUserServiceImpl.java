@@ -19,6 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.USER_ALREADY_EXISTS_MESSAGE;
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.USER_NOT_FOUND_MESSAGE;
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.INVALID_ROLE_MESSAGE;
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.ROLE_ALREADY_ASSIGNED_MESSAGE;
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.CANNOT_LOCK_ADMIN_MESSAGE;
+
 @Service
 public class AppUserServiceImpl implements AppUserService {
 
@@ -29,8 +35,7 @@ public class AppUserServiceImpl implements AppUserService {
     public AppUserServiceImpl(
             AppUserRepository userRepository,
             AppUserRoleRepository roleRepository,
-            PasswordEncoder encoder
-    ) {
+            PasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.encoder = encoder;
@@ -40,7 +45,7 @@ public class AppUserServiceImpl implements AppUserService {
     @Transactional
     public UserResponse register(UserRegistrationRequest request) {
         userRepository.findByUsernameIgnoreCase(request.username()).ifPresent(user -> {
-            throw new EntityAlreadyExistsException("User already exists.");
+            throw new EntityAlreadyExistsException(USER_ALREADY_EXISTS_MESSAGE);
         });
 
         AppUser user = AppUserMapper.dtoToEntity(request);
@@ -58,15 +63,17 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserResponse> findAll() {
         List<AppUser> users = userRepository.findAllByOrderByIdAsc();
         return AppUserMapper.entityToDtoList(users);
     }
 
     @Override
+    @Transactional
     public UserDeletionResponse delete(String username) {
         AppUser user = userRepository.findByUsernameIgnoreCase(username)
-                .orElseThrow(() -> new EntityNotFoundException("User not found!"));
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
 
         userRepository.delete(user);
 
@@ -77,14 +84,14 @@ public class AppUserServiceImpl implements AppUserService {
     @Transactional
     public UserResponse changeRole(UserRoleUpdateRequest request) {
         if (request.role().equals(RoleType.ADMINISTRATOR)) {
-            throw new InvalidRoleException("Invalid role. The available roles are MERCHANT and SUPPORT.");
+            throw new InvalidRoleException(INVALID_ROLE_MESSAGE);
         }
 
         AppUser user = userRepository.findByUsernameIgnoreCase(request.username())
-                .orElseThrow(() -> new EntityNotFoundException("User not found!"));
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
 
         if (user.getRole().getName().equals(request.role().name())) {
-            throw new RoleAlreadyAssignedException("User already has this role!");
+            throw new RoleAlreadyAssignedException(ROLE_ALREADY_ASSIGNED_MESSAGE);
         }
 
         AppUserRole userRole = getOrCreateRole(request.role());
@@ -98,10 +105,10 @@ public class AppUserServiceImpl implements AppUserService {
     @Transactional
     public UserStatusUpdateResponse changeStatus(UserStatusUpdateRequest request) {
         AppUser user = userRepository.findByUsernameIgnoreCase(request.username())
-                .orElseThrow(() -> new EntityNotFoundException("User not found!"));
+                .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
 
         if (user.getRole().getName().equals(RoleType.ADMINISTRATOR.name())) {
-            throw new CannotLockAdminException("Cannot assign LOCK status to ADMIN.");
+            throw new CannotLockAdminException(CANNOT_LOCK_ADMIN_MESSAGE);
         }
 
         user.setLocked(request.operation().equals(UserOperation.LOCK));

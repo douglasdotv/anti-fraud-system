@@ -1,5 +1,6 @@
 package br.com.dv.antifraud.service.transaction.strategy;
 
+import br.com.dv.antifraud.constants.AntifraudSystemConstants;
 import br.com.dv.antifraud.dto.transaction.TransactionRequest;
 import br.com.dv.antifraud.enums.TransactionInfo;
 import br.com.dv.antifraud.enums.TransactionResult;
@@ -19,7 +20,8 @@ public class LastHourIpProhibitedCheck implements TransactionCheck {
     public boolean matchesCondition(TransactionRequest request) {
         var count = repository.countDistinctIpsInLastHour(
                 request.number(), request.ip(), request.date().minusHours(1), request.date());
-        return count > 2;
+
+        return count > AntifraudSystemConstants.LAST_HOUR_IP_REGION_COUNT_THRESHOLD;
     }
 
     @Override
@@ -34,7 +36,7 @@ public class LastHourIpProhibitedCheck implements TransactionCheck {
 
     @Override
     public int getSeverity() {
-        return 2;
+        return AntifraudSystemConstants.SEVERITY_PROHIBITED;
     }
 
 }

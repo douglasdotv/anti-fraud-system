@@ -10,20 +10,26 @@ import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDateTime;
 
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.AMOUNT_REQUIRED_MESSAGE;
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.AMOUNT_MUST_BE_POSITIVE_MESSAGE;
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.IPV4_REGEX;
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.INVALID_IPV4_MESSAGE;
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.INVALID_REGION_MESSAGE;
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.DATE_CANNOT_BE_NULL_MESSAGE;
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.DATE_PAST_OR_PRESENT_MESSAGE;
+
 public record TransactionRequest(
-        @NotNull(message = "Amount is required.")
-        @Positive(message = "Amount must be positive.")
+        @NotNull(message = AMOUNT_REQUIRED_MESSAGE)
+        @Positive(message = AMOUNT_MUST_BE_POSITIVE_MESSAGE)
         Long amount,
-        @Pattern(regexp = "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)(\\.(?!$)|$)){4}$", message = "Invalid IPv4 format.")
+        @Pattern(regexp = IPV4_REGEX, message = INVALID_IPV4_MESSAGE)
         String ip,
         @CardNumber
         String number,
-        @EnumValue(
-                enumClass = WorldRegion.class,
-                message = "Invalid region. The available regions are: EAP, ECA, HIC, LAC, MENA, SA and SSA.")
+        @EnumValue(enumClass = WorldRegion.class, message = INVALID_REGION_MESSAGE)
         WorldRegion region,
-        @NotNull(message = "Date cannot be null.")
-        @PastOrPresent(message = "Date must be in the past or present.")
+        @NotNull(message = DATE_CANNOT_BE_NULL_MESSAGE)
+        @PastOrPresent(message = DATE_PAST_OR_PRESENT_MESSAGE)
         LocalDateTime date
 ) {
 }
