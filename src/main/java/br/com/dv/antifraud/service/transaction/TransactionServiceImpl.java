@@ -3,10 +3,12 @@ package br.com.dv.antifraud.service.transaction;
 import br.com.dv.antifraud.dto.transaction.TransactionResponse;
 import br.com.dv.antifraud.dto.transaction.TransactionRequest;
 import br.com.dv.antifraud.dto.transaction.TransactionOutcome;
+import br.com.dv.antifraud.entity.Card;
 import br.com.dv.antifraud.entity.Transaction;
 import br.com.dv.antifraud.enums.TransactionResult;
 import br.com.dv.antifraud.exception.custom.TransactionsNotFoundException;
 import br.com.dv.antifraud.mapper.TransactionMapper;
+import br.com.dv.antifraud.repository.CardRepository;
 import br.com.dv.antifraud.repository.TransactionRepository;
 import br.com.dv.antifraud.service.transaction.strategy.TransactionCheck;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static br.com.dv.antifraud.constants.AntifraudSystemConstants.TRANSACTIONS_NOT_FOUND_MESSAGE;
 
@@ -22,11 +25,14 @@ import static br.com.dv.antifraud.constants.AntifraudSystemConstants.TRANSACTION
 public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
+    private final CardRepository cardRepository;
     private final List<TransactionCheck> transactionChecks;
 
     public TransactionServiceImpl(TransactionRepository transactionRepository,
+                                  CardRepository cardRepository,
                                   List<TransactionCheck> transactionChecks) {
         this.transactionRepository = transactionRepository;
+        this.cardRepository = cardRepository;
         this.transactionChecks = transactionChecks;
     }
 
@@ -34,6 +40,8 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional
     public TransactionOutcome processTransaction(TransactionRequest request) {
         Transaction transaction = TransactionMapper.dtoToEntity(request);
+
+        saveCardIfNotExists(request.number());
 
         TransactionResult result = getTransactionResult(request);
         String info = getTransactionInfo(request, result);
@@ -44,6 +52,16 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction savedTransaction = transactionRepository.save(transaction);
 
         return TransactionMapper.entityToOutcomeDto(savedTransaction);
+    }
+
+    private void saveCardIfNotExists(String cardNumber) {
+        Optional<Card> cardOptional = cardRepository.findByCardNumber(cardNumber);
+
+        if (cardOptional.isEmpty()) {
+            Card card = new Card();
+            card.setCardNumber(cardNumber);
+            cardRepository.save(card);
+        }
     }
 
     private TransactionResult getTransactionResult(TransactionRequest request) {
