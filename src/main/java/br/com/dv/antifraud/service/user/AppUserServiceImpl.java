@@ -8,7 +8,7 @@ import br.com.dv.antifraud.enums.UserOperation;
 import br.com.dv.antifraud.exception.custom.CannotLockAdminException;
 import br.com.dv.antifraud.exception.custom.EntityAlreadyExistsException;
 import br.com.dv.antifraud.exception.custom.InvalidRoleException;
-import br.com.dv.antifraud.exception.custom.RoleAlreadyAssignedException;
+import br.com.dv.antifraud.exception.custom.AlreadyAssignedException;
 import br.com.dv.antifraud.mapper.AppUserMapper;
 import br.com.dv.antifraud.repository.AppUserRepository;
 import br.com.dv.antifraud.repository.AppUserRoleRepository;
@@ -91,7 +91,7 @@ public class AppUserServiceImpl implements AppUserService {
                 .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE));
 
         if (user.getRole().getName().equals(request.role().name())) {
-            throw new RoleAlreadyAssignedException(ROLE_ALREADY_ASSIGNED_MESSAGE);
+            throw new AlreadyAssignedException(ROLE_ALREADY_ASSIGNED_MESSAGE);
         }
 
         AppUserRole userRole = getOrCreateRole(request.role());
