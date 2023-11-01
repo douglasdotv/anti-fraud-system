@@ -59,24 +59,29 @@ public class SecurityConfig {
                                 mvc.pattern(HttpMethod.GET, "/api/antifraud/stolencard"),
                                 mvc.pattern(HttpMethod.POST, "/api/antifraud/suspicious-ip"),
                                 mvc.pattern(HttpMethod.DELETE, "/api/antifraud/suspicious-ip/*"),
-                                mvc.pattern(HttpMethod.GET, "/api/antifraud/suspicious-ip")
+                                mvc.pattern(HttpMethod.GET, "/api/antifraud/suspicious-ip"),
+                                mvc.pattern(HttpMethod.PUT, "/api/antifraud/transaction"),
+                                mvc.pattern(HttpMethod.GET, "/api/antifraud/history/**")
                         ).hasRole("SUPPORT")
 
-                        // For Hyperskill automated tests (not intended for production)
-                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/actuator/shutdown")).permitAll()
+                        // For tests
+                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/actuator/shutdown"))
+                        .permitAll()
 
-                        // For H2 console (not intended for production)
-                        .requestMatchers(PathRequest.toH2Console()).permitAll()
+                        // For H2
+                        .requestMatchers(PathRequest.toH2Console())
+                        .permitAll()
 
-                        .anyRequest().permitAll()
+                        .anyRequest()
+                        .authenticated()
                 )
                 .sessionManagement(cfg ->
                         cfg.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .userDetailsService(userDetailsService)
-                // Disable CSRF protection to facilitate testing (not intended for production)
+                // Disable CSRF protection to facilitate testing
                 .csrf(CsrfConfigurer::disable)
-                // Disable frame options to allow H2 console (not intended for production)
+                // Disable frame options to allow H2
                 .headers(cfg ->
                         cfg.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable)
                 )
