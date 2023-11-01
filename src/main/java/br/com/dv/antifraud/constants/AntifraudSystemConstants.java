@@ -9,11 +9,10 @@ public final class AntifraudSystemConstants {
     public static final int SEVERITY_ALLOWED = 0;
     public static final int SEVERITY_MANUAL_PROCESSING = 1;
     public static final int SEVERITY_PROHIBITED = 2;
-    public static final int UPPER_LIMIT_AMOUNT_ALLOWED = 200;
-    public static final int LOWER_LIMIT_AMOUNT_MANUAL_PROCESSING = 201;
-    public static final int UPPER_LIMIT_AMOUNT_MANUAL_PROCESSING = 1500;
-    public static final int LOWER_LIMIT_AMOUNT_PROHIBITED = 1501;
     public static final int LAST_HOUR_IP_REGION_COUNT_THRESHOLD = 2;
+
+    public static final long INITIAL_ALLOWED_MAX = 200;
+    public static final long INITIAL_MANUAL_PROCESSING_MAX = 1500;
 
     public static final String STATUS_DELETED_SUCCESSFULLY = "Deleted successfully!";
     public static final String STATUS_LOCKED = "locked";
@@ -35,6 +34,10 @@ public final class AntifraudSystemConstants {
             "Invalid region. The available regions are: EAP, ECA, HIC, LAC, MENA, SA and SSA.";
     public final static String DATE_CANNOT_BE_NULL_MESSAGE = "Date cannot be null.";
     public final static String DATE_PAST_OR_PRESENT_MESSAGE = "Date must be in the past or present.";
+    public final static String ID_NOT_NULL_MESSAGE = "ID cannot be null.";
+    public final static String ID_MUST_BE_POSITIVE_MESSAGE = "ID must be positive.";
+    public final static String INVALID_FEEDBACK_MESSAGE =
+            "Invalid feedback. The available feedbacks are ALLOWED, MANUAL_PROCESSING and PROHIBITED.";
 
     public final static String IPV4_REGEX = "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)(\\.(?!$)|$)){4}$";
     public final static String INVALID_IPV4_MESSAGE = "Invalid IPv4 format.";
@@ -54,6 +57,7 @@ public final class AntifraudSystemConstants {
 
     public final static String STOLEN_CARD_ALREADY_EXISTS_MESSAGE = "Stolen card already exists.";
     public final static String STOLEN_CARD_NOT_FOUND_MESSAGE = "Stolen card not found.";
+    public final static String CARD_NOT_FOUND_MESSAGE = "Card not found.";
 
     public final static String ROLE_PREFIX = "ROLE_";
 
