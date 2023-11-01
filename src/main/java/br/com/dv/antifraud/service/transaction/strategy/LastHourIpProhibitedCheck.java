@@ -17,9 +17,9 @@ public class LastHourIpProhibitedCheck implements TransactionCheck {
     }
 
     @Override
-    public boolean matchesCondition(TransactionRequest request) {
+    public boolean matchesCondition(TransactionRequest transaction) {
         var count = repository.countDistinctIpsInLastHour(
-                request.number(), request.ip(), request.date().minusHours(1), request.date());
+                transaction.number(), transaction.ip(), transaction.date().minusHours(1), transaction.date());
 
         return count > AntifraudSystemConstants.LAST_HOUR_IP_REGION_COUNT_THRESHOLD;
     }

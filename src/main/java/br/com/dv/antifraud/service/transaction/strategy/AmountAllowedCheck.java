@@ -20,11 +20,11 @@ public class AmountAllowedCheck implements TransactionCheck {
     }
 
     @Override
-    public boolean matchesCondition(TransactionRequest request) {
-        var card = repository.findByCardNumber(request.number())
+    public boolean matchesCondition(TransactionRequest transaction) {
+        var card = repository.findByCardNumber(transaction.number())
                 .orElseThrow(() -> new EntityNotFoundException(CARD_NOT_FOUND_MESSAGE));
 
-        return request.amount() <= card.getAllowedMax();
+        return transaction.amount() <= card.getAllowedMax();
     }
 
     @Override

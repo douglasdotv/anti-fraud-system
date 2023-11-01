@@ -17,8 +17,8 @@ public class SuspiciousIpCheck implements TransactionCheck {
     }
 
     @Override
-    public boolean matchesCondition(TransactionRequest request) {
-        return repository.findByIpAddress(request.ip()).isPresent();
+    public boolean matchesCondition(TransactionRequest transaction) {
+        return repository.findByIpAddress(transaction.ip()).isPresent();
     }
 
     @Override
