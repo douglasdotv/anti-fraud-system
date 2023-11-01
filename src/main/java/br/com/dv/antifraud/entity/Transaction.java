@@ -43,6 +43,6 @@ public class Transaction {
     private String info;
 
     @Column(name = "feedback")
-    private String feedback;
+    private String feedback = "";
 
 }
