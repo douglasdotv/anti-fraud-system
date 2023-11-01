@@ -5,7 +5,7 @@ import br.com.dv.antifraud.enums.TransactionResult;
 
 public interface TransactionCheck {
 
-    boolean matchesCondition(TransactionRequest request);
+    boolean matchesCondition(TransactionRequest transaction);
 
     TransactionResult getResult();
 
