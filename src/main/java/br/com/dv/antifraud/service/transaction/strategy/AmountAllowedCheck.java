@@ -4,14 +4,27 @@ import br.com.dv.antifraud.constants.AntifraudSystemConstants;
 import br.com.dv.antifraud.dto.transaction.TransactionRequest;
 import br.com.dv.antifraud.enums.TransactionInfo;
 import br.com.dv.antifraud.enums.TransactionResult;
+import br.com.dv.antifraud.repository.CardRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Component;
+
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.CARD_NOT_FOUND_MESSAGE;
 
 @Component
 public class AmountAllowedCheck implements TransactionCheck {
 
+    private final CardRepository repository;
+
+    public AmountAllowedCheck(CardRepository repository) {
+        this.repository = repository;
+    }
+
     @Override
     public boolean matchesCondition(TransactionRequest request) {
-        return request.amount() <= AntifraudSystemConstants.UPPER_LIMIT_AMOUNT_ALLOWED;
+        var card = repository.findByCardNumber(request.number())
+                .orElseThrow(() -> new EntityNotFoundException(CARD_NOT_FOUND_MESSAGE));
+
+        return request.amount() <= card.getAllowedMax();
     }
 
     @Override
