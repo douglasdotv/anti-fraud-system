@@ -42,4 +42,7 @@ public class Transaction {
     @Column(name = "info", nullable = false)
     private String info;
 
+    @Column(name = "feedback")
+    private String feedback;
+
 }
