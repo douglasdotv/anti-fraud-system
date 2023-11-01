@@ -1,9 +1,11 @@
 package br.com.dv.antifraud.service.transaction;
 
-import br.com.dv.antifraud.dto.transaction.TransactionRequest;
 import br.com.dv.antifraud.dto.transaction.TransactionResponse;
+import br.com.dv.antifraud.dto.transaction.TransactionRequest;
+import br.com.dv.antifraud.dto.transaction.TransactionOutcome;
 import br.com.dv.antifraud.entity.Transaction;
 import br.com.dv.antifraud.enums.TransactionResult;
+import br.com.dv.antifraud.exception.custom.TransactionsNotFoundException;
 import br.com.dv.antifraud.mapper.TransactionMapper;
 import br.com.dv.antifraud.repository.TransactionRepository;
 import br.com.dv.antifraud.service.transaction.strategy.TransactionCheck;
@@ -13,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static br.com.dv.antifraud.constants.AntifraudSystemConstants.TRANSACTIONS_NOT_FOUND_MESSAGE;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -28,18 +32,18 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    public TransactionResponse processTransaction(TransactionRequest request) {
+    public TransactionOutcome processTransaction(TransactionRequest request) {
         Transaction transaction = TransactionMapper.dtoToEntity(request);
 
         TransactionResult result = getTransactionResult(request);
-        transaction.setResult(result);
-
         String info = getTransactionInfo(request, result);
+
+        transaction.setResult(result);
         transaction.setInfo(info);
 
         Transaction savedTransaction = transactionRepository.save(transaction);
 
-        return TransactionMapper.entityToDto(savedTransaction);
+        return TransactionMapper.entityToOutcomeDto(savedTransaction);
     }
 
     private TransactionResult getTransactionResult(TransactionRequest request) {
@@ -71,6 +75,21 @@ public class TransactionServiceImpl implements TransactionService {
         Collections.sort(reasons);
 
         return String.join(", ", reasons);
+    }
+
+    public List<TransactionResponse> getTransactionHistory() {
+        List<Transaction> transactions = transactionRepository.findAll();
+        return TransactionMapper.entityToResponseDtoList(transactions);
+    }
+
+    public List<TransactionResponse> getTransactionHistoryByCardNumber(String cardNumber) {
+        List<Transaction> transactions = transactionRepository.findAllByCardNumber(cardNumber);
+
+        if (transactions.isEmpty()) {
+            throw new TransactionsNotFoundException(TRANSACTIONS_NOT_FOUND_MESSAGE);
+        }
+
+        return TransactionMapper.entityToResponseDtoList(transactions);
     }
 
 }

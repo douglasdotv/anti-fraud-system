@@ -47,6 +47,8 @@ public final class AntifraudSystemConstants {
     public final static String ROLE_ALREADY_ASSIGNED_MESSAGE = "User already has this role.";
     public final static String CANNOT_LOCK_ADMIN_MESSAGE = "Cannot assign LOCK status to ADMIN.";
 
+    public final static String TRANSACTIONS_NOT_FOUND_MESSAGE = "No transactions were found.";
+
     public final static String SUSPICIOUS_IP_ADDRESS_ALREADY_EXISTS_MESSAGE = "Suspicious IP address already exists.";
     public final static String SUSPICIOUS_IP_ADDRESS_NOT_FOUND_MESSAGE = "Suspicious IP address not found.";
 

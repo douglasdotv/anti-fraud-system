@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
@@ -28,5 +29,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
             """)
     Long countDistinctIpsInLastHour(String cardNumber, String ip,
                                     LocalDateTime oneHourBefore, LocalDateTime now);
+
+    List<Transaction> findAllByCardNumber(String cardNumber);
 
 }

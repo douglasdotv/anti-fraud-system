@@ -1,10 +1,7 @@
 package br.com.dv.antifraud.exception;
 
 import br.com.dv.antifraud.dto.error.CustomErrorMessage;
-import br.com.dv.antifraud.exception.custom.CannotLockAdminException;
-import br.com.dv.antifraud.exception.custom.EntityAlreadyExistsException;
-import br.com.dv.antifraud.exception.custom.InvalidRoleException;
-import br.com.dv.antifraud.exception.custom.RoleAlreadyAssignedException;
+import br.com.dv.antifraud.exception.custom.*;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -32,6 +29,7 @@ public class GlobalExceptionHandler {
         EXCEPTION_STATUS_MAP.put(InvalidRoleException.class, HttpStatus.BAD_REQUEST);
         EXCEPTION_STATUS_MAP.put(RoleAlreadyAssignedException.class, HttpStatus.CONFLICT);
         EXCEPTION_STATUS_MAP.put(CannotLockAdminException.class, HttpStatus.BAD_REQUEST);
+        EXCEPTION_STATUS_MAP.put(TransactionsNotFoundException.class, HttpStatus.NOT_FOUND);
         EXCEPTION_STATUS_MAP.put(ConstraintViolationException.class, HttpStatus.BAD_REQUEST);
         EXCEPTION_STATUS_MAP.put(HttpMessageNotReadableException.class, HttpStatus.BAD_REQUEST);
     }
@@ -43,6 +41,7 @@ public class GlobalExceptionHandler {
             InvalidRoleException.class,
             RoleAlreadyAssignedException.class,
             CannotLockAdminException.class,
+            TransactionsNotFoundException.class,
             ConstraintViolationException.class,
             HttpMessageNotReadableException.class
     })
