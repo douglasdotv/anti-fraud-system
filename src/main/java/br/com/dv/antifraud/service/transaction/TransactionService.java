@@ -1,17 +1,17 @@
 package br.com.dv.antifraud.service.transaction;
 
-import br.com.dv.antifraud.dto.transaction.TransactionHistoryResponse;
-import br.com.dv.antifraud.dto.transaction.TransactionRequest;
 import br.com.dv.antifraud.dto.transaction.TransactionResponse;
+import br.com.dv.antifraud.dto.transaction.TransactionRequest;
+import br.com.dv.antifraud.dto.transaction.TransactionOutcome;
 
 import java.util.List;
 
 public interface TransactionService {
 
-    TransactionResponse processTransaction(TransactionRequest request);
+    TransactionOutcome processTransaction(TransactionRequest request);
 
-    List<TransactionHistoryResponse> getTransactionHistory();
+    List<TransactionResponse> getTransactionHistory();
 
-    List<TransactionHistoryResponse> getTransactionHistoryByCardNumber(String cardNumber);
+    List<TransactionResponse> getTransactionHistoryByCardNumber(String cardNumber);
 
 }

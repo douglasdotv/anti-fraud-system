@@ -1,8 +1,8 @@
 package br.com.dv.antifraud.controller;
 
-import br.com.dv.antifraud.dto.transaction.TransactionHistoryResponse;
-import br.com.dv.antifraud.dto.transaction.TransactionRequest;
 import br.com.dv.antifraud.dto.transaction.TransactionResponse;
+import br.com.dv.antifraud.dto.transaction.TransactionRequest;
+import br.com.dv.antifraud.dto.transaction.TransactionOutcome;
 import br.com.dv.antifraud.service.transaction.TransactionService;
 import br.com.dv.antifraud.validation.CardNumber;
 import jakarta.validation.Valid;
@@ -22,24 +22,24 @@ public class TransactionController {
     }
 
     @PostMapping("/transaction")
-    public ResponseEntity<TransactionResponse> processTransaction(@Valid @RequestBody TransactionRequest request) {
-        TransactionResponse response = transactionService.processTransaction(request);
+    public ResponseEntity<TransactionOutcome> processTransaction(@Valid @RequestBody TransactionRequest request) {
+        TransactionOutcome response = transactionService.processTransaction(request);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/history")
-    public ResponseEntity<List<TransactionHistoryResponse>> getTransactionHistory() {
-        List<TransactionHistoryResponse> response = transactionService.getTransactionHistory();
+    public ResponseEntity<List<TransactionResponse>> getTransactionHistory() {
+        List<TransactionResponse> response = transactionService.getTransactionHistory();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/history/{number}")
-    public ResponseEntity<List<TransactionHistoryResponse>> getTransactionHistoryByCardNumber(
+    public ResponseEntity<List<TransactionResponse>> getTransactionHistoryByCardNumber(
             @PathVariable
             @CardNumber
             String number
     ) {
-        List<TransactionHistoryResponse> response = transactionService.getTransactionHistoryByCardNumber(number);
+        List<TransactionResponse> response = transactionService.getTransactionHistoryByCardNumber(number);
         return ResponseEntity.ok(response);
     }
 

@@ -1,8 +1,8 @@
 package br.com.dv.antifraud.service.transaction;
 
-import br.com.dv.antifraud.dto.transaction.TransactionHistoryResponse;
-import br.com.dv.antifraud.dto.transaction.TransactionRequest;
 import br.com.dv.antifraud.dto.transaction.TransactionResponse;
+import br.com.dv.antifraud.dto.transaction.TransactionRequest;
+import br.com.dv.antifraud.dto.transaction.TransactionOutcome;
 import br.com.dv.antifraud.entity.Transaction;
 import br.com.dv.antifraud.enums.TransactionResult;
 import br.com.dv.antifraud.exception.custom.TransactionsNotFoundException;
@@ -32,7 +32,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    public TransactionResponse processTransaction(TransactionRequest request) {
+    public TransactionOutcome processTransaction(TransactionRequest request) {
         Transaction transaction = TransactionMapper.dtoToEntity(request);
 
         TransactionResult result = getTransactionResult(request);
@@ -43,7 +43,7 @@ public class TransactionServiceImpl implements TransactionService {
 
         Transaction savedTransaction = transactionRepository.save(transaction);
 
-        return TransactionMapper.entityToDto(savedTransaction);
+        return TransactionMapper.entityToOutcomeDto(savedTransaction);
     }
 
     private TransactionResult getTransactionResult(TransactionRequest request) {
@@ -77,19 +77,19 @@ public class TransactionServiceImpl implements TransactionService {
         return String.join(", ", reasons);
     }
 
-    public List<TransactionHistoryResponse> getTransactionHistory() {
+    public List<TransactionResponse> getTransactionHistory() {
         List<Transaction> transactions = transactionRepository.findAll();
-        return TransactionMapper.entityToHistoryResponseDtoList(transactions);
+        return TransactionMapper.entityToResponseDtoList(transactions);
     }
 
-    public List<TransactionHistoryResponse> getTransactionHistoryByCardNumber(String cardNumber) {
+    public List<TransactionResponse> getTransactionHistoryByCardNumber(String cardNumber) {
         List<Transaction> transactions = transactionRepository.findAllByCardNumber(cardNumber);
 
         if (transactions.isEmpty()) {
             throw new TransactionsNotFoundException(TRANSACTIONS_NOT_FOUND_MESSAGE);
         }
 
-        return TransactionMapper.entityToHistoryResponseDtoList(transactions);
+        return TransactionMapper.entityToResponseDtoList(transactions);
     }
 
 }
