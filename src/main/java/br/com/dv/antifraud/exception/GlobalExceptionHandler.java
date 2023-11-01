@@ -30,6 +30,8 @@ public class GlobalExceptionHandler {
         EXCEPTION_STATUS_MAP.put(RoleAlreadyAssignedException.class, HttpStatus.CONFLICT);
         EXCEPTION_STATUS_MAP.put(CannotLockAdminException.class, HttpStatus.BAD_REQUEST);
         EXCEPTION_STATUS_MAP.put(TransactionsNotFoundException.class, HttpStatus.NOT_FOUND);
+        EXCEPTION_STATUS_MAP.put(FeedbackAlreadyAssignedException.class, HttpStatus.CONFLICT);
+        EXCEPTION_STATUS_MAP.put(SameFeedbackAndResultException.class, HttpStatus.UNPROCESSABLE_ENTITY);
         EXCEPTION_STATUS_MAP.put(ConstraintViolationException.class, HttpStatus.BAD_REQUEST);
         EXCEPTION_STATUS_MAP.put(HttpMessageNotReadableException.class, HttpStatus.BAD_REQUEST);
     }
@@ -42,6 +44,8 @@ public class GlobalExceptionHandler {
             RoleAlreadyAssignedException.class,
             CannotLockAdminException.class,
             TransactionsNotFoundException.class,
+            FeedbackAlreadyAssignedException.class,
+            SameFeedbackAndResultException.class,
             ConstraintViolationException.class,
             HttpMessageNotReadableException.class
     })

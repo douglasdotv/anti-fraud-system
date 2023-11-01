@@ -51,6 +51,9 @@ public final class AntifraudSystemConstants {
     public final static String CANNOT_LOCK_ADMIN_MESSAGE = "Cannot assign LOCK status to ADMIN.";
 
     public final static String TRANSACTIONS_NOT_FOUND_MESSAGE = "No transactions were found.";
+    public final static String TRANSACTION_NOT_FOUND_MESSAGE = "Transaction not found.";
+    public final static String FEEDBACK_ALREADY_ASSIGNED_MESSAGE = "This feedback is already assigned.";
+    public final static String SAME_RESULT_AND_FEEDBACK_MESSAGE = "Feedback and transaction result cannot be the same.";
 
     public final static String SUSPICIOUS_IP_ADDRESS_ALREADY_EXISTS_MESSAGE = "Suspicious IP address already exists.";
     public final static String SUSPICIOUS_IP_ADDRESS_NOT_FOUND_MESSAGE = "Suspicious IP address not found.";
