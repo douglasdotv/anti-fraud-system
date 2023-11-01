@@ -17,8 +17,8 @@ public class StolenCardCheck implements TransactionCheck {
     }
 
     @Override
-    public boolean matchesCondition(TransactionRequest request) {
-        return repository.findByCardNumber(request.number()).isPresent();
+    public boolean matchesCondition(TransactionRequest transaction) {
+        return repository.findByCardNumber(transaction.number()).isPresent();
     }
 
     @Override

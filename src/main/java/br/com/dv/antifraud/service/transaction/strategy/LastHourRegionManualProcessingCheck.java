@@ -17,9 +17,9 @@ public class LastHourRegionManualProcessingCheck implements TransactionCheck {
     }
 
     @Override
-    public boolean matchesCondition(TransactionRequest request) {
+    public boolean matchesCondition(TransactionRequest transaction) {
         var count = repository.countDistinctRegionsInLastHour(
-                request.number(), request.region(), request.date().minusHours(1), request.date());
+                transaction.number(), transaction.region(), transaction.date().minusHours(1), transaction.date());
 
         return count == AntifraudSystemConstants.LAST_HOUR_IP_REGION_COUNT_THRESHOLD;
     }
