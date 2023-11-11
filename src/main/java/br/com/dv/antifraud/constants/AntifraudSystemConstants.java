@@ -2,7 +2,7 @@ package br.com.dv.antifraud.constants;
 
 public final class AntifraudSystemConstants {
 
-    public AntifraudSystemConstants() {
+    private AntifraudSystemConstants() {
         throw new UnsupportedOperationException(CLASS_CANNOT_BE_INSTANTIATED_MESSAGE);
     }
 
