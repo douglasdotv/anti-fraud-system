@@ -9,6 +9,7 @@ import br.com.dv.antifraud.service.transaction.TransactionService;
 import br.com.dv.antifraud.validation.CardNumber;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,24 +27,28 @@ public class TransactionController {
     }
 
     @PostMapping("/transaction")
+    @PreAuthorize("hasRole('MERCHANT')")
     public ResponseEntity<TransactionOutcome> processTransaction(@Valid @RequestBody TransactionRequest request) {
         TransactionOutcome response = transactionService.processTransaction(request);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/transaction")
+    @PreAuthorize("hasRole('SUPPORT')")
     public ResponseEntity<TransactionResponse> addFeedback(@Valid @RequestBody FeedbackRequest request) {
         TransactionResponse response = feedbackService.addFeedback(request);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/history")
+    @PreAuthorize("hasRole('SUPPORT')")
     public ResponseEntity<List<TransactionResponse>> getTransactionHistory() {
         List<TransactionResponse> response = transactionService.getTransactionHistory();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/history/{number}")
+    @PreAuthorize("hasRole('SUPPORT')")
     public ResponseEntity<List<TransactionResponse>> getTransactionHistoryByCardNumber(
             @CardNumber @PathVariable String number
     ) {
