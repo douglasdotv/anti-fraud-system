@@ -4,6 +4,7 @@ import br.com.dv.antifraud.dto.user.*;
 import br.com.dv.antifraud.service.user.AppUserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -29,24 +30,28 @@ public class AuthController {
     }
 
     @GetMapping("/list")
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'SUPPORT')")
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserResponse> response = userService.findAll();
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/user/{username}")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<UserDeletionResponse> deleteUser(@PathVariable String username) {
         UserDeletionResponse response = userService.delete(username);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/role")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<UserResponse> changeRole(@RequestBody UserRoleUpdateRequest request) {
         UserResponse response = userService.changeRole(request);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/access")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<UserStatusUpdateResponse> changeStatus(@RequestBody UserStatusUpdateRequest request) {
         UserStatusUpdateResponse response = userService.changeStatus(request);
         return ResponseEntity.ok(response);
